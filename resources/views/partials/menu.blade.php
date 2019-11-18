@@ -83,7 +83,9 @@
                     </li>
 
                     <li class="nav-item">
+                    /* Added By Mohiuddin */
                     <a href="{{ route("admin.unitmanage.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+                    /* ------------------ */
                     <i class="fa fa-user nav-icon">
 
                     </i>

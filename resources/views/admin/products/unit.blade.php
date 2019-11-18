@@ -18,7 +18,7 @@
                         
                         </th>
                         <th>
-                        S/L
+                        {{ trans('global.sl') }}
                         </th>
                         <th>
                             {{ trans('global.unitManages.fields.id') }}

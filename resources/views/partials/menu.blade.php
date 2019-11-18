@@ -83,7 +83,7 @@
                     </li>
 
                     <li class="nav-item">
-                    <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+                    <a href="{{ route("admin.unitmanage.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                     <i class="fa fa-user nav-icon">
 
                     </i>

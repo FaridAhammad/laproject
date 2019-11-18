@@ -4,7 +4,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a href="{{ route("admin.home") }}" class="nav-link">
-                    <i class="fa fa-dashboard nav_icon"></i>
+                    <i class="fa fa-dashboard nav-icon"></i>
 
                     </i>
                     {{ trans('global.dashboard') }}
@@ -12,7 +12,7 @@
             </li>
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-users nav-icon">
 
                     </i>
                     {{ trans('global.administrator.title') }}
@@ -20,7 +20,7 @@
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="{{ route('admin.usermanage.index') }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
-                            <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                            <i class="fa fa-address-book  nav-icon" aria-hidden="true"></i>
 
                             </i>
                             {{ trans('global.permissions.title') }}
@@ -28,7 +28,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route("admin.Projectmanage.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase nav-icon">
+                            <i class="fa fa-briefcase nav-icon">
 
                             </i>
                             {{ trans('global.projectManage.title') }}
@@ -49,7 +49,7 @@
 
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-users nav-icon">
 
                     </i>
                     {{ trans('global.productManages.title') }}
@@ -57,7 +57,7 @@
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/productManagements') || request()->is('admin/productManagements/*') ? 'active' : '' }}">
-                            <i class="fas fa-unlock-alt nav-icon">
+                            <i class="fa fa-unlock-alt nav-icon">
 
                             </i>
                             {{ trans('global.product_group.title') }}
@@ -66,7 +66,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.productSubGroup.title') }}
@@ -75,7 +75,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase nav-icon">
+                            <i class="fa fa-briefcase nav-icon">
 
                             </i>
                             {{ trans('global.product_management_child.title') }}
@@ -84,7 +84,7 @@
 
                     <li class="nav-item">
                     <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                    <i class="fas fa-user nav-icon">
+                    <i class="fa fa-user nav-icon">
 
                     </i>
                     {{ trans('global.unitManages.title') }}
@@ -92,7 +92,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.vendorManages.title') }}
@@ -106,7 +106,7 @@
 
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-users nav-icon">
 
                     </i>
                     {{ trans('global.purchase.title') }}
@@ -114,7 +114,7 @@
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/productManagements') || request()->is('admin/productManagements/*') ? 'active' : '' }}">
-                            <i class="fas fa-unlock-alt nav-icon">
+                            <i class="fa fa-unlock-alt nav-icon">
 
                             </i>
                             {{ trans('global.localPurchase.title') }}
@@ -123,7 +123,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.vendorPurchase.title') }}
@@ -132,7 +132,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase nav-icon">
+                            <i class="fa fa-briefcase nav-icon">
 
                             </i>
                             {{ trans('global.otherReceive.title') }}
@@ -141,7 +141,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.purchaseReturn.title') }}
@@ -157,7 +157,7 @@
 
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-users nav-icon">
 
                     </i>
                     {{ trans('global.sales.title') }}
@@ -165,7 +165,7 @@
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/productManagements') || request()->is('admin/productManagements/*') ? 'active' : '' }}">
-                            <i class="fas fa-unlock-alt nav-icon">
+                            <i class="fa fa-unlock-alt nav-icon">
 
                             </i>
                             {{ trans('global.localSales.title') }}
@@ -174,7 +174,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.customerSales.title') }}
@@ -183,7 +183,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase nav-icon">
+                            <i class="fa fa-briefcase nav-icon">
 
                             </i>
                             {{ trans('global.otherSales.title') }}
@@ -192,7 +192,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.salesReturn.title') }}
@@ -209,7 +209,7 @@
 
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-users nav-icon">
 
                     </i>
                     {{ trans('global.reports.title') }}
@@ -217,7 +217,7 @@
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/productManagements') || request()->is('admin/productManagements/*') ? 'active' : '' }}">
-                            <i class="fas fa-unlock-alt nav-icon">
+                            <i class="fa fa-unlock-alt nav-icon">
 
                             </i>
                             {{ trans('global.purchaseReports.title') }}
@@ -226,7 +226,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                            <i class="fas fa-user nav-icon">
+                            <i class="fa fa-user nav-icon">
 
                             </i>
                             {{ trans('global.salesReports.title') }}
@@ -235,7 +235,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase nav-icon">
+                            <i class="fa fa-briefcase nav-icon">
 
                             </i>
                             {{ trans('global.stockReports.title') }}
@@ -260,7 +260,7 @@
 
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                    <i class="nav-icon fas fa-sign-out-alt">
+                    <i class="nav-icon fa fa-sign-out aria-hidden="true"">
 
                     </i>
                     {{ trans('global.logout') }}

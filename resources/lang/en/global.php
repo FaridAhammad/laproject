@@ -215,8 +215,10 @@ return [
         'title_singular' => 'Unit Manages',
         'fields'         => [
             'id'                 => 'ID',
+            /* Added By Mohiuddin */
             'unitname'           => 'unit Name',
             'unit'               => 'Unit',
+            /* ------------------ */
             'id_helper'          => '',
             'title'              => 'Title',
             'title_helper'       => '',

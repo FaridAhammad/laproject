@@ -156,6 +156,8 @@ return [
         'title_singular' => 'Product Group',
         'fields'         => [
             'id'                 => 'ID',
+             'name'=>'Product Name', /added by sarif
+
             'id_helper'          => '',
             'title'              => 'Title',
             'title_helper'       => '',
@@ -173,9 +175,14 @@ return [
     'productSubGroup'      => [
         'title'          => 'Product Sub Group',
         'title_singular' => 'Product Group',
+        
+         
+
         'fields'         => [
             'id'                 => 'ID',
+            'name'=>'Sub Group', //added by sarif 
             'id_helper'          => '',
+             'group'=>'Group Name', //added by sarif
             'title'              => 'Title',
             'title_helper'       => '',
             'permissions'        => 'Permissions',
@@ -215,10 +222,8 @@ return [
         'title_singular' => 'Unit Manages',
         'fields'         => [
             'id'                 => 'ID',
-            /* Added By Mohiuddin */
             'unitname'           => 'unit Name',
             'unit'               => 'Unit',
-            /* ------------------ */
             'id_helper'          => '',
             'title'              => 'Title',
             'title_helper'       => '',

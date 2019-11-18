@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'sl'                                  => 'S/L',
     'add'                                  => 'Add',
     'create'                               => 'Create',
     'list'                                 => 'List',

@@ -91,7 +91,7 @@
       @if($update==true) @method('PUT')
       @endif
       <div class="form-group">
-                  <label for="name">Unit Name*</label>
+                  <label for="name">{{ trans('global.unitManages.fields.unitname') }}*</label>
                   <input type="text" id="name" name="unit_name" class="form-control{{ $errors->has('unit_name') ? ' is-invalid' : '' }}" value="{{ $name }}">
                   @if($errors->has('unit_name'))
                       <em class="invalid-feedback" role="alert">
@@ -102,7 +102,7 @@
               </div>
   
               <div class="form-group">
-                  <label for="detail">Unit Detail</label>
+                  <label for="detail">{{ trans('global.unitManages.fields.detail') }}</label>
                   <input type="text" id="detail" name="unit_detail" class="form-control{{ $errors->has('detail') ? ' is-invalid' : '' }}" value="{{ $detail }}">
                   @if($errors->has('detail'))
                       <em class="invalid-feedback" role="alert">

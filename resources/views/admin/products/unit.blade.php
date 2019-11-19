@@ -20,10 +20,7 @@
                         <th>
                         {{ trans('global.sl') }}
                         </th>
-                        <th>
-                            {{ trans('global.unitManages.fields.id') }}
-                        </th>
-
+                       
                         <th>
                             {{ trans('global.unitManages.fields.unitname') }}
                         </th>
@@ -44,10 +41,7 @@
                             <td>
                             {{ $num }}
                             </td>
-                            <td>
-                            {{ $uams->id }}
-                            </td>
-
+                           
                             <td>
                             {{ $uams->unit_name }}
                             </td>

@@ -6,6 +6,7 @@ use Dotenv\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\model\Unit_management;
+use Carbon\Carbon;
 
 
 class UnitmanageController extends Controller
@@ -46,15 +47,27 @@ class UnitmanageController extends Controller
     {
         abort_unless(\Gate::allows('user_create'), 403);
 
+         
+       
         
         
         request()->validate([
             'unit_name'=>  ['required', 'string', 'max:255', 'unique:unit_management'],
             'unit_detail'=> '',
+            
         ]);
+        
+        
+        // $unit_management = Unit_management::create($request->all());
 
+        $time = Carbon::now()->setTimezone('Asia/Dhaka');
 
-        $unit_management = Unit_management::create($request->all());
+        $unit_management = Unit_management::create([
+            'unit_name'=> $request->input('unit_name'),
+            'unit_detail'=> $request->input('unit_detail'),
+            'entry_by'=> '1001',
+            'entry_at'=> $time,
+        ]);
 
         return redirect()->route('admin.unitmanage.index');
     }
@@ -110,7 +123,7 @@ class UnitmanageController extends Controller
     {
 
         request()->validate([
-            'unit_name'=>  ['required', 'string', 'max:255', 'unique:unit_management'],
+            'unit_name'=>  ['required', 'string', 'max:255'],
             'unit_detail'=> '',
         ]);
 
@@ -118,11 +131,14 @@ class UnitmanageController extends Controller
         $uama = Unit_management::where('id', $id);
 
 
+        $time = Carbon::now()->setTimezone('Asia/Dhaka');
 
         $uama->update([
 
                 'unit_name'=>$request->input('unit_name'),
                 'unit_detail'=>$request->input('unit_detail'),
+                'edit_by'=> '1001',
+                'edit_at'=> $time,
                  
         ]);
         $update=false;
@@ -142,7 +158,16 @@ class UnitmanageController extends Controller
     {
         $user = Unit_management::where('id', $id);
 
-        $user->delete();
+        $time = Carbon::now()->setTimezone('Asia/Dhaka');
+        $user->update([
+            'status'=> '1',
+            'delete_by'=> '1001',
+            'delete_at'=> $time,
+
+
+        ]);
+
+        // $user->delete();
         return redirect()->route('admin.unitmanage.index');
 
 

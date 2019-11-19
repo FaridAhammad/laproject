@@ -27,6 +27,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('usermanage', 'administrator\UsermanageController');
 
     Route::resource('Projectmanage', 'administrator\ProjectmanageController');
+    Route::resource('unitmanage', 'products\UnitmanageController');
 
 
 

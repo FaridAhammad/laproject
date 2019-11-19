@@ -108,7 +108,10 @@ class UnitmanageController extends Controller
     public function update(Request $request, $id)
     {
 
-
+        request()->validate([
+            'unit_name'=>  ['required', 'string', 'max:255'],
+            'unit_detail'=> '',
+        ]);
 
         $uama = Unit_management::where('id', $id);
 

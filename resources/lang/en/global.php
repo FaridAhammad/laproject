@@ -222,7 +222,8 @@ return [
         'title_singular' => 'Unit Manages',
         'fields'         => [
             'id'                 => 'ID',
-            'unitname'           => 'unit Name',
+            'unitname'           => 'Unit Name',
+             'detail'             => 'Unit Detail',
             'unit'               => 'Unit',
             'id_helper'          => '',
             'title'              => 'Title',

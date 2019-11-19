@@ -92,7 +92,7 @@ class UnitmanageController extends Controller
     public function edit($id)
     {
         abort_unless(\Gate::allows('user_edit'), 403);
-        $uams=Unit_management::all();
+        $uams=Unit_management::where('status', 0)->get();
 
 
 

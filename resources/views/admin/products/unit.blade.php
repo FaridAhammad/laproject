@@ -117,11 +117,11 @@
              @if($update == true)
 
              <div class="col">
-                  <button class="btn btn-danger" name="update" type="submit" value="update">Update</button>
+                  <button class="btn btn-danger" name="update" type="submit" value="{{ trans('global.update') }}">{{ trans('global.update') }}</button>
               </div>
              @elseif($update == false)
              <div class="col">
-                  <input class="btn btn-danger" type="submit" name="adduser" value="Add User" >
+                  <input class="btn btn-success" type="submit" name="adduser" value="{{ trans('global.save') }}" >
               </div>
                       
             @endif

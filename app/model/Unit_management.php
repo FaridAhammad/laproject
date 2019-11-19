@@ -14,13 +14,16 @@ class unit_management extends Model
     protected $table = 'unit_management';
     public $timestamps = false;
     protected $fillable = [
-        'id',
+         'id',
         'unit_name',
         'unit_detail',
+        'status',
         'entry_by',
         'entry_at',
         'edit_by',
         'edit_at',
+        'delete_by',
+        'delete_at',
     ];
 
 

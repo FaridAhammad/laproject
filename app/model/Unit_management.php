@@ -17,6 +17,10 @@ class unit_management extends Model
         'id',
         'unit_name',
         'unit_detail',
+        'entry_by',
+        'entry_at',
+        'edit_by',
+        'edit_at',
     ];
 
 

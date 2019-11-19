@@ -49,9 +49,10 @@ class UnitmanageController extends Controller
         
         
         request()->validate([
-            'unit_name'=>  ['required', 'string', 'max:255'],
+            'unit_name'=>  ['required', 'string', 'max:255', 'unique:unit_management'],
             'unit_detail'=> '',
         ]);
+
 
         $unit_management = Unit_management::create($request->all());
 
@@ -109,9 +110,10 @@ class UnitmanageController extends Controller
     {
 
         request()->validate([
-            'unit_name'=>  ['required', 'string', 'max:255'],
+            'unit_name'=>  ['required', 'string', 'max:255', 'unique:unit_management'],
             'unit_detail'=> '',
         ]);
+
 
         $uama = Unit_management::where('id', $id);
 

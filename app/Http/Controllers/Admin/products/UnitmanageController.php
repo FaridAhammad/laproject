@@ -139,9 +139,16 @@ class UnitmanageController extends Controller
     public function update(Request $request, $id)
     {
 
-        request()->validate([
-            'unit_name'=>  ['required', 'string', 'max:255'],
-            'unit_detail'=> '',
+       request()->validate([
+            'unit_name'=>  ['required', 
+            'string', 
+            'max:255',
+            Rule::unique('unit_management')->where (function ($query) use ($request) {
+                return $query->where('status', 0);
+            })->ignore($id, 'id')
+
+            ],
+
         ]);
 
 

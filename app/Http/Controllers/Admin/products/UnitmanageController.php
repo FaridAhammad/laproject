@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin\products;
-
+use App\Rules\Uppercase;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\model\Unit_management;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule; 
 
 
 class UnitmanageController extends Controller
@@ -52,10 +53,26 @@ class UnitmanageController extends Controller
         
         
         request()->validate([
-            'unit_name'=>  ['required', 'string', 'max:255', 'unique:unit_management'],
+            'unit_name'=>  ['required', 
+            'string',
+            'max:255', 
+            Rule::unique('unit_management')->where (function ($query) use ($request) {
+                return $query->where('status', 0);
+            })
+            
+        ],
+            
+            
+
             'unit_detail'=> '',
             
         ]);
+
+        // Rule::unique('unit_management,')->where(function ($query) {
+        //     return $query->where('status', 0);
+        // }),
+
+        // 'unique:unit_management',
         
         
         // $unit_management = Unit_management::create($request->all());

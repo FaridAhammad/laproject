@@ -34,7 +34,7 @@ class ProductsubgroupController extends Controller
         $product_gp=Product_group::all()->where('status', 0);
 
 
-        return view('admin.products.productSubGroup', ['gname'=>'','email'=>'','sub_group_id'=>'','password'=>'', 'update'=>$update], compact('uams', 'product_gp'));
+        return view('admin.products.productSubGroup', [ 'update'=>$update], compact('uams', 'product_gp'));
 
 
     }
@@ -57,7 +57,7 @@ class ProductsubgroupController extends Controller
      */
     public function store(Request $request)
     {
-$update=false;
+
 
 
     $request->validate([
@@ -72,7 +72,6 @@ $update=false;
 
             'group_name' => 'required',
         ]);
-        $uams=Product_sub_group::with('product_group')->select('*')->where('status', 0)->get();
 
         $product_gp=Product_group::all()->where('status', 0);
 
@@ -82,8 +81,7 @@ $update=false;
 
     ]);
 
-        return view('admin.products.productSubGroup', ['gname'=>'','email'=>'','sub_group_id'=>'','password'=>'', 'update'=>$update], compact('uams', 'product_gp'));
-
+return redirect()->route('admin.productsubgroup.index');
 
         //
     }

@@ -1,4 +1,5 @@
 
+
 @extends('layouts.admin')
 @section('content')
     <div class="" style="background-color: #FFFFFF;">
@@ -139,7 +140,7 @@
                     @endif
                     <div class="form-group {{ $errors->has('sub_group_name') ? 'has-error' : '' }}">
                         <label for="sub_group_name"> {{ trans('global.productSubGroup.fields.name') }} {{ trans('global.name') }}*</label>
-                        <input type="text" id="sub_group_name" name="sub_group_name" class="form-control" value="{{$gname}}"
+                        <input type="text" id="sub_group_name" name="sub_group_name" class="form-control" value="{{$gname??''}}"
                                 {{--value="{{ old('username', isset($user) ? $user->username : '') }}"--}}
                         >
                         @if($errors->has('sub_group_name'))
@@ -201,4 +202,6 @@
         </div>
     </div>
 @endsection
+
+
 

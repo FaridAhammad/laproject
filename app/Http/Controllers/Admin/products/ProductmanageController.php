@@ -86,6 +86,9 @@ class ProductmanageController extends Controller
         'entry_at'=>$time,
 
         ]);
+        
+        session()->flash('message', 'Data Inserted Successfully');
+        session()->flash('type', 'success');
 
         return redirect()->route('admin.productmanage.index');
 
@@ -181,6 +184,9 @@ class ProductmanageController extends Controller
     
             ]);
             $update=false;
+        
+            session()->flash('message', 'Data Updated Successfully');
+            session()->flash('type', 'success');
 
             return redirect()->route('admin.productmanage.index');
     

@@ -74,7 +74,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
+                        <a href="{{ route("admin.productmanage.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
                             <i class="fa fa-briefcase nav-icon">
 
                             </i>

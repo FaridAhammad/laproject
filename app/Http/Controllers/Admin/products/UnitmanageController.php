@@ -85,6 +85,9 @@ class UnitmanageController extends Controller
             'entry_by'=> '1001',
             'entry_at'=> $time,
         ]);
+        
+        session()->flash('message', 'Data Inserted Successfully');
+        session()->flash('type', 'success');
 
         return redirect()->route('admin.unitmanage.index');
     }
@@ -166,6 +169,10 @@ class UnitmanageController extends Controller
                  
         ]);
         $update=false;
+        
+        session()->flash('message', 'Data Updated Successfully');
+        session()->flash('type', 'success');
+        
         return redirect()->route('admin.unitmanage.index');
 
 

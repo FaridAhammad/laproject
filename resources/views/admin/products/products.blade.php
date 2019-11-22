@@ -83,6 +83,12 @@
       <div class="card-header">
       {{ trans('global.product_management_child.fields.productinfo') }}
       </div>
+      
+      @if(session()->has('message'))
+      <div class="font-weight-bold text-center alert alert-{{session('type')}}">
+      {{ session('message') }}
+      </div>
+      @endif  
   
       <div class="card-body">
   

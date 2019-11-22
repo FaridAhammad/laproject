@@ -202,6 +202,15 @@ return [
         'title_singular' => 'Product Manages',
         'fields'         => [
             'id'                 => 'ID',
+            
+            'itemname'           => 'Item Name',
+            'productinfo'        => 'Product Information',
+            'details'            => 'Details',
+            'sub_group_name'     => 'Sub Group Name',
+            'product_nature'     => 'Product Nature',
+            'cost_price'         => 'Cost Price',
+            'sale_price'         => 'Sale Price',
+            
             'id_helper'          => '',
             'title'              => 'Title',
             'title_helper'       => '',

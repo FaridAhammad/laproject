@@ -282,6 +282,12 @@ return [
         'title'          => 'Local Purchase',
         'title_singular' => 'Local Purchase',
         'fields'         => [
+            'vp_no'=>'VP No',
+            'vp_date'=>'VP Date',
+            'vendor_name'=>'Vendor Name',
+            'invoice_no'=>'Invoice No',
+            'update'=>'Update VP Information',
+            'save'=>'Initial VP Information',
             'id'                 => 'ID',
             'id_helper'          => '',
             'title'              => 'Title',

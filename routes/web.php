@@ -30,6 +30,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('productsubgroup', 'products\ProductsubgroupController');
     Route::resource('unitmanage', 'products\UnitmanageController');
      Route::resource('productmanage', 'products\ProductmanageController');
+     Route::resource('localpurchase', 'purchase\LocalpurchaseController');
+
 
 
 

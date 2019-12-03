@@ -76,10 +76,9 @@
 
                         <option  @if($save==false) { @if($wor->receive_type == "Opening Balance") selected @endif } @endif value="Opening Balance")>Opening Balance</option>
                        <option @if($save==false) { @if($wor->receive_type == "Local Purchase") selected @endif } @endif value="Local Purchase") >Local Purchase</option>
-                       {{--<option {{isset($orno->receive_type)=="Vendor Purchase" ? 'selected' :''}} >Vendor Purchase</option>--}}
-                       {{--<option {{isset($orno->receive_type)=="Other Receive" ? 'selected' :''}}>Other Receive</option>--}}
+                       <option @if($save==false) { @if($wor->receive_type == "Vendor Purchase") selected @endif } @endif value="Vendor Purchase") >Vendor Purchase</option>
+                       <option @if($save==false) { @if($wor->receive_type == "Other Receive") selected @endif } @endif value="Other Receive") >Other Receive</option>
                    </select>
-
                     @if($errors->has('receive_type'))
                         <em class="invalid-feedback  ">
                             {{ $errors->first('vendor_name') }}

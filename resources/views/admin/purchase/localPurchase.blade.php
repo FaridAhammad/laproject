@@ -1,5 +1,26 @@
 @extends('layouts.admin')
-@section('style')
+@section('styles')
+    <style type="text/css">
+      .itemList ul li {
+            color: black;
+          cursor: pointer;
+          padding-left: 5px;
+
+
+        }
+      .itemList ul li:nth-child(odd) {
+            color: black;
+          background-color:#CCCCCC;
+        }
+      .itemList ul li:nth-child(even) {
+            color: black;
+          background-color: white;
+        }
+      .itemList ul li:hover{
+          color: white;
+          background-color: #0b4d75;
+      }
+    </style>
 @endsection
 @section('content')
 
@@ -73,12 +94,12 @@
 
                         {{--{{old('job_status',$profile->job_status)=="unemployed"? 'selected':''}--}}
                         {{--@if($update==true) { @if($product_nature == "Purchasable") selected @endif } @endif--}}
-
                         <option  @if($save==false) { @if($wor->receive_type == "Opening Balance") selected @endif } @endif value="Opening Balance")>Opening Balance</option>
                        <option @if($save==false) { @if($wor->receive_type == "Local Purchase") selected @endif } @endif value="Local Purchase") >Local Purchase</option>
                        <option @if($save==false) { @if($wor->receive_type == "Vendor Purchase") selected @endif } @endif value="Vendor Purchase") >Vendor Purchase</option>
                        <option @if($save==false) { @if($wor->receive_type == "Other Receive") selected @endif } @endif value="Other Receive") >Other Receive</option>
                    </select>
+
                     @if($errors->has('receive_type'))
                         <em class="invalid-feedback  ">
                             {{ $errors->first('vendor_name') }}
@@ -174,6 +195,7 @@
                         <td align="center" bgcolor="#0099FF"><strong>Amount</strong></td>
                         <td  rowspan="2" align="center" bgcolor="#FF0000">
                             <div class="button">
+
                                 <input name="add" type="submit" id="add" value="ADD"  class="update"/>
                             </div>
                         </td>
@@ -189,7 +211,12 @@
                                 {{--<input  name="or_date" type="hidden" id="or_date" value=""/>--}}
                                 {{--<input  name="vendor_name" type="hidden" id="vendor_name" value=""--}}
                                 {{--<input  name="vendor_id" type="hidden" id="vendor_id" value=""/>--}}
-                                <input  name="item_id" type="text" id="item_id" value=""  class="w-100" required onblur="getData2('local_purchase_ajax.php', 'po',this.value,document.getElementById('warehouse_id').value);"/>
+                                <input  name="item_id"  type="text" id="item_id" value=""  class="w-100"
+                                        {{--required onblur="getData2('local_purchase_ajax.php', 'po',this.value,document.getElementById('warehouse_id').value);"--}}
+
+                                />
+
+
                             </td>
                             <td colspan="3" style="padding-right: 0"  bgcolor="#CCCCCC">
 <span  id="po">
@@ -205,6 +232,10 @@
 
                     </tbody>
                 </table>
+
+            </div>
+            <div id="itemList" class="itemList" style="margin-top: -30px;  padding-left: 10px;">
+
             </div>
         </div>
 
@@ -214,21 +245,60 @@
 
 
 
-    
 
 @endsection
+
 @section('scripts')
-    <script type="text/javascript">
+    <script>
+        $(document).ready(function(){
 
-        $('.date').datepicker({
+            $('#item_id').keyup(function(){
 
-            format: 'yyyy-mm-dd'
+                if ($(this).val().length == 0) {
+                    // Hide the element
+                    $('#itemList').hide();
+                }
+
+                else {
+                    var query = $(this).val();
+                    if(query != '')
+                    {
+                        var _token = $('input[name="_token"]').val();
+                        $.ajax({
+                            url:"{{ route('admin.search') }}",
+                            method:"POST",
+                            data:{query:query, _token:_token},
+                            success:function(data){
+                                $('#itemList').fadeIn();
+                                $('#itemList').html(data);
+                            }
+                        });
+                    }
+                }
+
+            });
+
+            $(document).on('click', 'li', function(){
+                $('#item_id').val($(this).text());
+                $('#itemList').fadeOut();
+            });
+
+
 
         });
 
-    </script>
-@endsection
 
+
+
+
+    </script>
+
+
+
+
+
+
+@endsection
 
 
 

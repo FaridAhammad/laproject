@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\purchase;
 use Carbon\Carbon;
-
+use App\model\Unit_management;
 use App\model\Warehouse_other_receive_detail;
 use App\model\Warehouse_other_receive;
 use function GuzzleHttp\describe_type;
@@ -126,25 +126,6 @@ class LocalpurchaseController extends Controller
 
     }
 
-//    public function sarif(Request $request){
-//        $save=false;
-//        $rr=session()->get('or_no');
-//
-//
-//
-//        $wor=Warehouse_other_receive::Select('*')->where('or_no', $rr)->first();
-//
-//
-//
-//
-//
-//
-//
-////        $orno= db_last_insert_id('warehouse_other_receive','or_no');
-//        $whord=Warehouse_other_receive_detail::selectRaw('or_no, sum(amount) as sum')->groupBy('or_no')->orderBy('or_no', 'DESC')->take(5)->get();
-//
-//        return view('admin.purchase.localPurchase', ['whord'=>$whord, 'wor'=>$wor, 'date'=>$wor->or_date, 'save'=>$save]);
-//    }
 
     /**
      * Display the specified resource.
@@ -215,5 +196,27 @@ class LocalpurchaseController extends Controller
     {
         //
     }
-}
 
+    function search(Request $request)
+    {
+        if($request->get('query'))
+        {
+            $query = $request->get('query');
+            $data = Unit_management::where('unit_name', 'LIKE', "%{$query}%")
+                ->get();
+            $output = '<ul class="dropdown-menu overflow-auto " style="display:block; position:relative; max-height:200px; width: 335px; ">';
+            foreach($data as $row)
+            {
+                $output .= '
+       <li class="">'.$row->unit_name.'</li>
+       ';
+            }
+            $output .= '</ul>';
+            echo $output;
+        }
+    }
+
+
+
+
+}

@@ -288,6 +288,8 @@ return [
             'invoice_no'=>'Invoice No',
             'update'=>'Update VP Information',
             'save'=>'Initial VP Information',
+             'receive_type'=>'Receive Type',
+
             'id'                 => 'ID',
             'id_helper'          => '',
             'title'              => 'Title',

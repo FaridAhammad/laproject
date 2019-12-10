@@ -1,29 +1,29 @@
 @extends('layouts.admin')
 @section('styles')
-    <style type="text/css">
-      .itemList ul li {
-            color: black;
-          cursor: pointer;
-          padding-left: 5px;
+<style type="text/css">
+    .itemList ul li {
+          color: black;
+        cursor: pointer;
+        padding-left: 5px;
 
 
-        }
-      .itemList ul li:nth-child(odd) {
-            color: black;
-          background-color:#CCCCCC;
-        }
-      .itemList ul li:nth-child(even) {
-            color: black;
-          background-color: white;
-        }
-      .itemList ul li:hover{
-          color: white;
-          background-color: #0b4d75;
       }
-    </style>
+    .itemList ul li:nth-child(odd) {
+          color: black;
+        background-color:#CCCCCC;
+      }
+    .itemList ul li:nth-child(even) {
+          color: black;
+        background-color: white;
+      }
+    .itemList ul li:hover{
+        color: white;
+        background-color: #0b4d75;
+    }
+  </style>
 @endsection
 @section('content')
-
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  -->
 
     <div class="w-100">
 
@@ -94,12 +94,12 @@
 
                         {{--{{old('job_status',$profile->job_status)=="unemployed"? 'selected':''}--}}
                         {{--@if($update==true) { @if($product_nature == "Purchasable") selected @endif } @endif--}}
+
                         <option  @if($save==false) { @if($wor->receive_type == "Opening Balance") selected @endif } @endif value="Opening Balance")>Opening Balance</option>
                        <option @if($save==false) { @if($wor->receive_type == "Local Purchase") selected @endif } @endif value="Local Purchase") >Local Purchase</option>
                        <option @if($save==false) { @if($wor->receive_type == "Vendor Purchase") selected @endif } @endif value="Vendor Purchase") >Vendor Purchase</option>
                        <option @if($save==false) { @if($wor->receive_type == "Other Receive") selected @endif } @endif value="Other Receive") >Other Receive</option>
                    </select>
-
                     @if($errors->has('receive_type'))
                         <em class="invalid-feedback  ">
                             {{ $errors->first('vendor_name') }}
@@ -114,7 +114,7 @@
 
                 <div class="form-group row">
 
-                    <span class="col-sm-3"></span>
+                   
 
                     <div class="col-sm-4">
                         <input class="btn btn-primary form-control" name="submit" type="submit" value="{{ trans('global.localPurchase.fields.save') }}">
@@ -125,10 +125,10 @@
                     @elseif($save==false)
                 <div class="form-group row">
 
-                    <span class="col-sm-3"></span>
+                    
 
-                    <div class="col-sm-4">
-                        <input class="btn btn-primary form-control" name="submit" type="submit" value="Update">
+                    <div class="d-flex justify-content-center">
+                        <input class="btn btn-primary form-control" name="submit" type="submit" value="{{ trans('global.localPurchase.fields.update') }}">
                     </div>
                 </div>
 
@@ -183,7 +183,7 @@
         <div class="card-body w-100 pt-0">
             <div class="table-responsive">
                 <table class=" table table-bordered table-striped table-hover datatable">
-                    <thead>
+                    
                     <tr>
                         <td align="center" bgcolor="#0099FF" class="" style="width:35%"><strong>Item Name</strong></td>
                         <td align="center" bgcolor="#0099FF"><strong>Stock</strong></td>
@@ -193,15 +193,14 @@
                         <td align="center" bgcolor="#0099FF"><strong>Qty</strong></td>
 
                         <td align="center" bgcolor="#0099FF"><strong>Amount</strong></td>
-                        <td  rowspan="2" align="center" bgcolor="#FF0000">
-                            <div class="button">
-
-                                <input name="add" type="submit" id="add" value="ADD"  class="update"/>
-                            </div>
+                        <td rowspan="2" align="center" bgcolor="#FF0000" class="pt-5">
+                        
+                                <input name="add" class="button pt-1 pb-2" type="submit" id="add" value="ADD"  class="update"/>
+                            
                         </td>
                     </tr>
-                    </thead>
-                    <tbody>
+                    
+                    
 
                         <tr>
                             <td align="center" bgcolor="#CCCCCC">
@@ -211,31 +210,81 @@
                                 {{--<input  name="or_date" type="hidden" id="or_date" value=""/>--}}
                                 {{--<input  name="vendor_name" type="hidden" id="vendor_name" value=""--}}
                                 {{--<input  name="vendor_id" type="hidden" id="vendor_id" value=""/>--}}
-                                <input  name="item_id"  type="text" id="item_id" value=""  class="w-100"
-                                        {{--required onblur="getData2('local_purchase_ajax.php', 'po',this.value,document.getElementById('warehouse_id').value);"--}}
 
-                                />
+                                <div class="form-group">
+                                <input  name="item" type="text" id="search" value=""  class="w-100" required onblur="getData2('local_purchase_ajax.php', 'po',this.value,document.getElementById('warehouse_id').value);" autocomplete="off"/>
+                                
+                                </div>
+                                {{ csrf_field() }}
+                                </div>
 
 
+
+                              
                             </td>
+                            
                             <td colspan="3" style="padding-right: 0"  bgcolor="#CCCCCC">
 <span  id="po">
     <input name="stk"  type="text" class="input3" id="stk" style="width:32%" readonly="readonly"/>
    <input name="unit" type="text" class="input3" id="unit" style="width:32%; " readonly="readonly"/>
-    <input name="price" type="text" class="input3" id="price" style="width:31%;"  readonly="readonly"/>
+    <input name="price" type="text" class="input3" id="price" style="width:31%;" oninput="count()"/>
   </span></td>
-                            <td align="center" bgcolor="#CCCCCC"><input name="discount" type="text" class="input3" id="discount"  maxlength="100" style="width:50px;" onchange="count()"/></td>
-                            <td align="center" bgcolor="#CCCCCC"><input name="qty" type="text" class="input3" id="qty"  maxlength="100" style="width:50px;" onchange="count()" required="required"/></td>
+                            <td align="center" bgcolor="#CCCCCC"><input name="discount" type="text" class="input3" id="discount"  maxlength="100" style="width:50px;" oninput="count()"/></td>
+                            <td align="center" bgcolor="#CCCCCC"><input name="qty" type="text" class="input3" id="qty"  maxlength="100" style="width:50px;" oninput="count()" required="required"/></td>
 
                             <td align="center" bgcolor="#CCCCCC"><input name="amount" type="text" class="input3" id="amount" style="width:85px;" readonly="readonly" required/></td>
                         </tr>
+                      
 
-                    </tbody>
+                    
                 </table>
 
-            </div>
-            <div id="itemList" class="itemList" style="margin-top: -30px;  padding-left: 10px;">
+                <div id="itemList" data-toggle="popover" style="margin-top:-40px; position: absolute;
+                left: 248px;
+                top: 690px;
+                z-index: 10">
 
+                </div> 
+
+                <table class=" table table-bordered table-striped table-hover datatable">
+                            
+                    <tr>
+                        <td><strong>Item Name</strong></td>
+                        <td><strong>Unit Name</strong></td>
+                        <td><strong>Unit Price</strong></td>
+                        <td><strong>Qty</strong></td>
+                        <td><strong>Discount</strong></td>
+                        <td><strong>Amount</strong></td>
+                        <td><strong>Delete</strong></td>
+                        
+                    </tr>
+                   
+                        
+                     @foreach ($data as $datas) 
+                    <tr>
+                        
+                    <td><strong>{{ $datas->item_name }}</strong></td>
+                        <td><strong>{{ $datas->unit_name }}</strong></td>
+                        <td><strong>{{ $datas->rate }}</strong></td>
+                        <td><strong>{{ $datas->qty }}</strong></td>
+                        <td><strong>{{ $datas->discount }}</strong></td>
+                        <td><strong>{{ $datas->item_name }}</strong></td>
+                    <td><strong><form action="{{ route('admin.localpurchase.destroy',  $datas->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="submit" class="btn btn-xs btn-danger" name='delete' value="{{ trans('global.delete') }}">
+                    </form></strong></td>
+                    </tr>
+                      
+                 @endforeach 
+                    
+                </table>
+                
+            </div>
+
+            
+
+            
             </div>
         </div>
 
@@ -246,59 +295,207 @@
 
 
 
+
+    
+
 @endsection
-
 @section('scripts')
-    <script>
-        $(document).ready(function(){
+<script>
+$(document).ready(function(){
 
-            $('#item_id').keyup(function(){
+ $('#search').keyup(function(event){ 
 
-                if ($(this).val().length == 0) {
-                    // Hide the element
-                    $('#itemList').hide();
-                }
+   
 
-                else {
-                    var query = $(this).val();
-                    if(query != '')
-                    {
-                        var _token = $('input[name="_token"]').val();
-                        $.ajax({
-                            url:"{{ route('admin.search') }}",
-                            method:"POST",
-                            data:{query:query, _token:_token},
-                            success:function(data){
-                                $('#itemList').fadeIn();
-                                $('#itemList').html(data);
-                            }
-                        });
-                    }
-                }
+    if ($(this).val().length == 0) {
+    // Hide the element
+    $('#itemList').hide();
+  }
 
-            });
+else if($(this).val().length > 0) {
+    
+    var query = $(this).val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ route('admin.auto.fetch') }}",
+          method:"POST",
+          data:{query:query, _token:_token},
+          success:function(data){
+            $('#itemList').fadeIn();   
+                    $('#itemList').html(data);
+          }
+         });
+        }
+}
 
-            $(document).on('click', 'li', function(){
-                $('#item_id').val($(this).text());
-                $('#itemList').fadeOut();
-            });
+// else if (event.which == '13') {
+//     alert('You pressed a "enter" key in somewhere');  
+//     }
+        
+    });
 
+    $(document).on('click', '#list', function(){
 
+        $('#search').val($(this).text());  
+        var item_Id =  $('#search').val().split("#>")[1];  
+        
+        $.ajax({
+            url: "{{ route('admin.auto.get') }}",
+            type: "POST",               
+            data: {
+                item_Id: item_Id,
+                "_token": "{{ csrf_token() }}",
+                },
+            
 
+            success: function (data) {
+                var stock =(data.stock);
+                var unit = (data.unit);
+                 var cost = (data.cost);
+                 $('#stk').val(stock);
+                 $('#unit').val(unit);
+                 $('#price').val(cost);
+                
+               
+            },
+            error: function(error)
+            {
+                alert('failed');
+                console.log(error);
+            }
         });
 
+             
+        $('#itemList').fadeOut(); 
+
+        
+
+        
+    });  
+
+     $(document).click(function() {
+     $('#itemList').fadeOut();
+ });
+
+
+$('#add').click(function() {
+   var or_no = $('#or_no').val();
+   var vp_date = $('#vp_date').val();
+   var vendor_name = $('#vendor_name').val();
+   var receive_type = $('#receive_type').val();
+   var warehouse_id = 51;
+   var item_id =  $('#search').val().split("#>")[1];
+   var unit_name = $('#unit').val();
+   var rate = $('#price').val();
+   var qty = $('#qty').val();
+   var discount = $('#discount').val();
+   var amount = $('#amount').val();
+   var entry_by = 1003;
+
+   $.ajax({
+    url: "{{ route('admin.create') }}",
+    type: "POST",
+    data: {
+                or_no: or_no,
+                vp_date: vp_date,
+                vendor_name: vendor_name,
+                receive_type: receive_type,
+                warehouse_id: warehouse_id,
+                item_id: item_id,
+                unit_name: unit_name,
+                rate: rate,
+                qty: qty,
+                discount: discount,
+                amount: amount,
+                entry_by: entry_by,
+                "_token": "{{ csrf_token() }}",
+                },
+    success: function (data) {
+                
+                $('#search').val(data.item_id);
+                $('#stk').val(data.stock);
+                $('#unit').val(data.unit);
+                $('#price').val(data.price);
+                $('#qty').val(data.qty);
+                $('#discount').val(data.discount);
+                $('#amount').val(data.amount);
+                $('#t_data').fadeIn(); 
+                $('#t_data').html(data.output);
+
+               
+            },
+            error: function(error)
+            {
+                alert('failed');
+                console.log(error);
+                console.log(response);
+                
+            }
+
+   });
+
+   
+
+   
+   
+   });
+   
 
 
 
 
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+</script>  
+
+<script language="javascript">
+    function count()
+    {
+    var discount = document.getElementById('discount').value;
+    var rate = ((document.getElementById('price').value)*1);
+    var qty = ((document.getElementById('qty').value)*1);
+    var num;
+    if((rate>0)&&(qty>0))
+    {
+        if(discount!='')
+        {var dis = discount.search("%");
+        if(dis>0)
+        {discount  = (discount.substring(0,dis)*1);
+        var num=(((rate)*(qty))-((((rate)*(qty))*(discount))/100));
+        }
+        else
+        {discount = (discount*1);
+        var num=(qty*(rate-discount));
+        }}
+        else
+        {var num=(((document.getElementById('qty').value)*1)*((document.getElementById('price').value)*1));}
+        
+        
+    
+    document.getElementById('amount').value = num.toFixed(2);    
+    }
+    
+    }
     </script>
 
 
 
-
-
-
 @endsection
+
 
 
 

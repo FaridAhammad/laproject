@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin\purchase;
 use Carbon\Carbon;
-use App\model\Unit_management;
+
 use App\model\Warehouse_other_receive_detail;
 use App\model\Warehouse_other_receive;
 use function GuzzleHttp\describe_type;
 use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\model\Item_info;
+use DB;
 
 class LocalpurchaseController extends Controller
 {
@@ -24,21 +26,54 @@ class LocalpurchaseController extends Controller
 
     public function index(Request $request)
     {
+
+
+     // $a = find_all_field('item_info', '*', '1');
+        
+        // $b = present_stock(91, 51);
+
+        
+
+
+        // $item_id = \DB::table('item_info')->select('item_id')->where('item_name', '000111')->get();
+        
+        
+
         if($request->session()->has('or_no'))
         {
 
             $save=false;
             $rr=session()->get('or_no');
 
-
+            
 
             $wor=Warehouse_other_receive::Select('*')->where('or_no', $rr)->first();
 
 
 //        $orno= db_last_insert_id('warehouse_other_receive','or_no');
             $whord=Warehouse_other_receive_detail::selectRaw('or_no, sum(amount) as sum')->groupBy('or_no')->orderBy('or_no', 'DESC')->take(5)->get();
+            
+            
 
-            return view('admin.purchase.localPurchase', ['whord'=>$whord, 'wor'=>$wor, 'date'=>$wor->or_date, 'save'=>$save]);
+            //$data = DB::select("select a.id,b.item_name,a.rate as unit_price,a.qty ,a.unit_name,a.discount,a.amount,'x' from warehouse_other_receive_detail a,item_info b where b.item_id=? and a.or_no=?", ['a.item_id', $rr]);
+            
+        
+        
+            $data = DB::table('warehouse_other_receive_detail')
+            ->join( 
+                'item_info', 'item_info.item_id', '=', 'warehouse_other_receive_detail.item_id')
+                ->where('warehouse_other_receive_detail.or_no', '=', $rr)
+                ->select( 'warehouse_other_receive_detail.id',  
+                'rate', 
+                'qty',
+                'warehouse_other_receive_detail.unit_name',
+                'discount',
+                'amount',
+                'item_info.item_name')->get();
+            
+            
+
+            return view('admin.purchase.localPurchase', ['whord'=>$whord, 'wor'=>$wor, 'date'=>$wor->or_date, 'save'=>$save, 'data'=>$data]);
 
         }
         else {
@@ -67,6 +102,8 @@ class LocalpurchaseController extends Controller
 
         return view('admin.purchase.localPurchase', ['whord'=>$whord, 'orno'=>$orno, 'date'=>$date, 'save'=>$save]);
         }
+
+       
     }
 
     /**
@@ -77,7 +114,44 @@ class LocalpurchaseController extends Controller
 
     public function create()
     {
-        //
+        
+        $time = Carbon::now()->setTimezone('Asia/Dhaka');
+
+        if( request()->get('discount') != null) {
+            $discount = request()->get('discount');
+        } else {
+            $discount = 0;
+        }
+
+        Warehouse_other_receive_detail::create([
+        "or_no" => request()->get('or_no'),
+        "vendor_name" => request()->get('vendor_name'),
+        "or_date" => request()->get('vp_date'),
+        "receive_type" => request()->get('receive_type'),
+        "warehouse_id" => request()->get('warehouse_id'),
+        "item_id" => request()->get('item_id'),
+        "unit_name" => request()->get('unit_name'),
+        "rate" => request()->get('rate'),
+        "qty" => request()->get('qty'),
+        "discount" => $discount,
+        "amount" => request()->get('amount'),
+        "entry_by" => request()->get('entry_by'),
+        "entry_at" => $time,
+        ]);
+        
+        $id = request()->get('item_id');
+       
+        
+
+
+        $item_id = '';
+        $stock = '';
+        $unit = '';
+        $qty = '';
+        $price= '';
+        $discount = '';
+        $amount = '';
+        return ['item_id'=>$item_id, 'stock'=>$stock, 'unit'=>$unit, 'qty'=>$qty, 'price'=>$price, 'discount'=>$discount, 'amount'=>$amount];
 
 
     }
@@ -126,6 +200,25 @@ class LocalpurchaseController extends Controller
 
     }
 
+//    public function sarif(Request $request){
+//        $save=false;
+//        $rr=session()->get('or_no');
+//
+//
+//
+//        $wor=Warehouse_other_receive::Select('*')->where('or_no', $rr)->first();
+//
+//
+//
+//
+//
+//
+//
+////        $orno= db_last_insert_id('warehouse_other_receive','or_no');
+//        $whord=Warehouse_other_receive_detail::selectRaw('or_no, sum(amount) as sum')->groupBy('or_no')->orderBy('or_no', 'DESC')->take(5)->get();
+//
+//        return view('admin.purchase.localPurchase', ['whord'=>$whord, 'wor'=>$wor, 'date'=>$wor->or_date, 'save'=>$save]);
+//    }
 
     /**
      * Display the specified resource.
@@ -194,29 +287,74 @@ class LocalpurchaseController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $data = Warehouse_other_receive_detail::where('id', $id)->delete();
+       return redirect()->route('admin.localpurchase.index');
     }
 
-    function search(Request $request)
+
+
+    function fetch(Request $request)
     {
-        if($request->get('query'))
-        {
-            $query = $request->get('query');
-            $data = Unit_management::where('unit_name', 'LIKE', "%{$query}%")
-                ->get();
-            $output = '<ul class="dropdown-menu overflow-auto " style="display:block; position:relative; max-height:200px; width: 335px; ">';
-            foreach($data as $row)
-            {
-                $output .= '
-       <li class="">'.$row->unit_name.'</li>
+     if($request->get('query'))
+     {
+    
+      $query = $request->get('query');
+      $data = DB::table('item_info')
+        ->where('item_name', 'LIKE', "%{$query}%")
+        ->orWhere('item_id', 'LIKE', "%{$query}%")
+        ->get();
+      
+        
+
+        
+        
+
+      $output = '<ul class="dropdown-menu overflow-auto ml-3" style="display:block; position:relative; max-height:200px; width: 335px;">';
+      foreach($data as $row)
+      {
+       $output .= '
+       <li id="list" class="ml-2 font-weight-bold text-decoration-none text-dark view overlay zoom" style="cursor:pointer">'.$row->item_name."&nbsp;"."#>".$row->item_id.'</li>
        ';
-            }
-            $output .= '</ul>';
-            echo $output;
-        }
-    }
+      }
+      $output .= '</ul>';
+      echo $output;
+     }
+
+     
+
+    
+}
+
+
+
+function stocks(Request $request) {
+   $item_id = $request->get('item_Id');
+  $stock = present_stock($item_id, 51);
+
+  $unit = DB::table('item_info')->where('item_id', $item_id)->value('unit_name');
+  $cost = DB::table('item_info')->where('item_id', $item_id)->value('cost_price');
+  
+
+  
+  
+
+  
+
+
+    return ['stock'=>$stock, 'unit'=>$unit, 'cost'=>$cost];
+
+}
+
+
+
+
 
 
 
 
 }
+
+
+
+
+

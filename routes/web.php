@@ -32,6 +32,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('productmanage', 'products\ProductmanageController');
     Route::resource('localpurchase', 'purchase\LocalpurchaseController');
     Route::post('localpurchase/search', 'purchase\LocalpurchaseController@search')->name('search');
+    
+    Route::post('/auto/fetch', 'purchase\LocalpurchaseController@fetch')->name('auto.fetch');
+    Route::post('/auto/get', 'purchase\LocalpurchaseController@stocks')->name('auto.get');
+    Route::post('/insert', 'purchase\LocalpurchaseController@create')->name('create');
+
 
 
 

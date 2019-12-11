@@ -33,7 +33,7 @@ class LocalpurchaseController extends Controller
         // $b = present_stock(91, 51);
 
         
-
+        
 
         // $item_id = \DB::table('item_info')->select('item_id')->where('item_name', '000111')->get();
         
@@ -55,11 +55,12 @@ class LocalpurchaseController extends Controller
             
             
 
-            //$data = DB::select("select a.id,b.item_name,a.rate as unit_price,a.qty ,a.unit_name,a.discount,a.amount,'x' from warehouse_other_receive_detail a,item_info b where b.item_id=? and a.or_no=?", ['a.item_id', $rr]);
+          
             
-        
-        
-            $data = DB::table('warehouse_other_receive_detail')
+            
+           
+
+                $data = DB::table('warehouse_other_receive_detail')
             ->join( 
                 'item_info', 'item_info.item_id', '=', 'warehouse_other_receive_detail.item_id')
                 ->where('warehouse_other_receive_detail.or_no', '=', $rr)
@@ -70,12 +71,13 @@ class LocalpurchaseController extends Controller
                 'discount',
                 'amount',
                 'item_info.item_name')->get();
-            
-            
+
 
             return view('admin.purchase.localPurchase', ['whord'=>$whord, 'wor'=>$wor, 'date'=>$wor->or_date, 'save'=>$save, 'data'=>$data]);
 
         }
+
+
         else {
 
 
@@ -114,44 +116,99 @@ class LocalpurchaseController extends Controller
 
     public function create()
     {
-        
-        $time = Carbon::now()->setTimezone('Asia/Dhaka');
 
-        if( request()->get('discount') != null) {
-            $discount = request()->get('discount');
-        } else {
-            $discount = 0;
+
+        request()->validate([
+            'item'=> 'required',
+            'qty'=> 'required',
+        ]);
+
+        $id = request()->input('item');
+        $item = explode('#>', $id);
+        $item_id = $item[1];
+        
+
+        if(request()->input('add')) {
+            $time = Carbon::now()->setTimezone('Asia/Dhaka');
+
+            if( request()->input('discount') != null) {
+                $discount = request()->input('discount');
+            } else {
+                $discount = 0;
+            }
+          
+            Warehouse_other_receive_detail::create([
+            "or_no" =>request()->input('or_no'),
+            "vendor_name" => request()->input('vendor_name'),
+            "or_date" => request()->input('or_date'),
+            "receive_type" => request()->input('receive_type'),
+            "warehouse_id" => 51,
+            "item_id" => $item_id,
+            "unit_name" => request()->input('unit'),
+            "rate" => request()->input('price'),
+            "qty" => request()->input('qty'),
+            "discount" => $discount,
+            "amount" => request()->input('amount'),
+            "entry_by" => 1003,
+            "entry_at" => $time,
+            ]);
+            
+            return redirect()->route('admin.localpurchase.index');
         }
 
-        Warehouse_other_receive_detail::create([
-        "or_no" => request()->get('or_no'),
-        "vendor_name" => request()->get('vendor_name'),
-        "or_date" => request()->get('vp_date'),
-        "receive_type" => request()->get('receive_type'),
-        "warehouse_id" => request()->get('warehouse_id'),
-        "item_id" => request()->get('item_id'),
-        "unit_name" => request()->get('unit_name'),
-        "rate" => request()->get('rate'),
-        "qty" => request()->get('qty'),
-        "discount" => $discount,
-        "amount" => request()->get('amount'),
-        "entry_by" => request()->get('entry_by'),
-        "entry_at" => $time,
-        ]);
         
-        $id = request()->get('item_id');
+       
+        // $data = DB::table('warehouse_other_receive_detail')
+        //     ->join( 
+        //         'item_info', 'item_info.item_id', '=', 'warehouse_other_receive_detail.item_id')
+        //         ->where('warehouse_other_receive_detail.or_no', '=', 2062)
+        //         ->select( 'warehouse_other_receive_detail.id',  
+        //         'rate', 
+        //         'qty',
+        //         'warehouse_other_receive_detail.unit_name',
+        //         'discount',
+        //         'amount',
+        //         'item_info.item_name')->get();
+        
+        //     $output = '<table class=" table table-bordered table-striped table-hover datatable">'.
+        //   '<tr>'.
+        //   '<td>'.'<strong>'."Item Name".'</strong>'.'</td>'.
+        //   '<td>'.'<strong>'."Unit Name".'</strong>'.'</td>'.
+        //   '<td>'.'<strong>'."Unit Price".'</strong>'.'</td>'.
+        //   '<td>'.'<strong>'."Qty".'</strong>'.'</td>'.
+        //   '<td>'.'<strong>'."Discount".'</strong>'.'</td>'.
+        //   '<td>'.'<strong>'."Amount".'</strong>'.'</td>'.
+        //   '<td>'.'<strong>'."Delete".'</strong>'.'</td>'.
+        //   '</tr>';
+
+        //  foreach($data as $datas) {
+        //     $output .= '<tr>'.
+        //     '<td>'.'<strong>'.$datas->item_name.'</strong>'.'</td>'.
+        //     '<td>'.'<strong>'.$datas->unit_name.'</strong>'.'</td>'.
+        //     '<td>'.'<strong>'.$datas->rate.'</strong>'.'</td>'.
+        //     '<td>'.'<strong>'.$datas->qty.'</strong>'.'</td>'.
+        //     '<td>'.'<strong>'.$datas->discount.'</strong>'.'</td>'.
+        //     '<td>'.'<strong>'.$datas->amount.'</strong>'.'</td>'.
+        //     '<td>'.'<strong>'."Delete".'</strong>'.'</td>'.
+        //     '</tr>';
+        //  }
+        
+        //   $output .= '</table>';
+        
+          
+        // $id = request()->get('item_id');
        
         
 
 
-        $item_id = '';
-        $stock = '';
-        $unit = '';
-        $qty = '';
-        $price= '';
-        $discount = '';
-        $amount = '';
-        return ['item_id'=>$item_id, 'stock'=>$stock, 'unit'=>$unit, 'qty'=>$qty, 'price'=>$price, 'discount'=>$discount, 'amount'=>$amount];
+        // $item_id = '';
+        // $stock = '';
+        // $unit = '';
+        // $qty = '';
+        // $price= '';
+        // $discount = '';
+        // $amount = '';
+        // return ['item_id'=>$item_id, 'stock'=>$stock, 'unit'=>$unit, 'qty'=>$qty, 'price'=>$price, 'discount'=>$discount, 'amount'=>$amount, 'output'=>$output];
 
 
     }

@@ -182,103 +182,133 @@
 
         <div class="card-body w-100 pt-0">
             <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable">
+            <form action="{{ route('admin.create') }}" method="POST">
+                 @csrf
+                    <table class=" table table-bordered table-striped table-hover datatable">
                     
-                    <tr>
-                        <td align="center" bgcolor="#0099FF" class="" style="width:35%"><strong>Item Name</strong></td>
-                        <td align="center" bgcolor="#0099FF"><strong>Stock</strong></td>
-                        <td align="center" bgcolor="#0099FF"><strong>Unit</strong></td>
-                        <td align="center" bgcolor="#0099FF"><strong>Price</strong></td>
-                        <td align="center" bgcolor="#0099FF"><strong>Discount</strong></td>
-                        <td align="center" bgcolor="#0099FF"><strong>Qty</strong></td>
-
-                        <td align="center" bgcolor="#0099FF"><strong>Amount</strong></td>
-                        <td rowspan="2" align="center" bgcolor="#FF0000" class="pt-5">
-                        
-                                <input name="add" class="button pt-1 pb-2" type="submit" id="add" value="ADD"  class="update"/>
-                            
-                        </td>
-                    </tr>
-                    
-                    
-
-                        <tr>
-                            <td align="center" bgcolor="#CCCCCC">
-                                {{--<input  name="receive_type" type="hidden" id="receive_type" value=""  required="required"/>--}}
-                                {{--<input  name="" type="hidden" id="" value=""/>--}}
-                                {{--<input  name="warehouse_id" type="hidden" id="warehouse_id" value=""/>--}}
-                                {{--<input  name="or_date" type="hidden" id="or_date" value=""/>--}}
-                                {{--<input  name="vendor_name" type="hidden" id="vendor_name" value=""--}}
-                                {{--<input  name="vendor_id" type="hidden" id="vendor_id" value=""/>--}}
-
-                                <div class="form-group">
-                                <input  name="item" type="text" id="search" value=""  class="w-100" required onblur="getData2('local_purchase_ajax.php', 'po',this.value,document.getElementById('warehouse_id').value);" autocomplete="off"/>
+                            <tr>
+                                <td align="center" bgcolor="#0099FF" class="" style="width:35%"><strong>Item Name</strong></td>
+                                <td align="center" bgcolor="#0099FF"><strong>Stock</strong></td>
+                                <td align="center" bgcolor="#0099FF"><strong>Unit</strong></td>
+                                <td align="center" bgcolor="#0099FF"><strong>Price</strong></td>
+                                <td align="center" bgcolor="#0099FF"><strong>Discount</strong></td>
+                                <td align="center" bgcolor="#0099FF"><strong>Qty</strong></td>
+        
+                                <td align="center" bgcolor="#0099FF"><strong>Amount</strong></td>
+                                <td rowspan="2" align="center" bgcolor="#FF0000" class="pt-5">
                                 
-                                </div>
-                                {{ csrf_field() }}
-                                </div>
-
-
-
-                              
-                            </td>
+                                        <input name="add" class="button pt-1 pb-2" type="submit" id="add" value="ADD"  class="update"/>
+                                    
+                                </td>
+                            </tr>
                             
-                            <td colspan="3" style="padding-right: 0"  bgcolor="#CCCCCC">
-<span  id="po">
-    <input name="stk"  type="text" class="input3" id="stk" style="width:32%" readonly="readonly"/>
-   <input name="unit" type="text" class="input3" id="unit" style="width:32%; " readonly="readonly"/>
-    <input name="price" type="text" class="input3" id="price" style="width:31%;" oninput="count()"/>
-  </span></td>
-                            <td align="center" bgcolor="#CCCCCC"><input name="discount" type="text" class="input3" id="discount"  maxlength="100" style="width:50px;" oninput="count()"/></td>
-                            <td align="center" bgcolor="#CCCCCC"><input name="qty" type="text" class="input3" id="qty"  maxlength="100" style="width:50px;" oninput="count()" required="required"/></td>
+                            
+        
+                                <tr>
+                                    <td align="center" bgcolor="#CCCCCC">
 
-                            <td align="center" bgcolor="#CCCCCC"><input name="amount" type="text" class="input3" id="amount" style="width:85px;" readonly="readonly" required/></td>
-                        </tr>
-                      
+                                        <input  name="receive_type" type="hidden" id="receive_type" value="{{$wor->receive_type}}"  required="required"/>
+                                       
+                                        <input  name="or_no" type="hidden" id="" value="{{ isset($orno) ?  "  ".$orno : "  ".$wor->or_no}}"/>
+                                        {{-- <input  name="warehouse_id" type="hidden" id="warehouse_id" value=""/> --}}
+                                        <input  name="or_date" type="hidden" id="or_date" value="{{$date ?? ''}}"/>
+                                        <input  name="vendor_name" type="hidden" id="vendor_name" value="{{ isset($wor) ? $wor->vendor_name : '' }}"/>
+                                        {{-- <input  name="vendor_id" type="hidden" id="vendor_id" value=""/> --}}
+        
+                                        <div class="form-group">
 
-                    
-                </table>
+                                        <input  name="item" type="text" id="search" value=""  class="w-100{{ $errors->has('item') ? ' is-invalid' : '' }}" required onblur="getData2('local_purchase_ajax.php', 'po',this.value,document.getElementById('warehouse_id').value);" autocomplete="off"/>
+                                        @if($errors->has('item'))
+                                        <em class="invalid-feedback" role="alert">
+                                             {{ $errors->first('item') }}
+                                            </em>
+                                            @endif
+                                        </div>
+                                        {{ csrf_field() }}
+                                        </div>
+        
+        
+        
+                                      
+                                    </td>
+                                    
+                                    <td colspan="3" style="padding-right: 0"  bgcolor="#CCCCCC">
+        <span  id="po">
+            <input name="stk"  type="text" class="input3" id="stk" style="width:32%" readonly="readonly"/>
+           <input name="unit" type="text" class="input3" id="unit" style="width:32%; " readonly="readonly"/>
+            <input name="price" type="text" class="input3" id="price" style="width:31%;" oninput="count()"/>
+          </span></td>
+                                    <td align="center" bgcolor="#CCCCCC"><input name="discount" type="text" class="input3" id="discount"  maxlength="100" style="width:50px;" oninput="count()"/></td>
+                                    <td align="center" bgcolor="#CCCCCC"><input name="qty" type="text" class="input3{{ $errors->has('qty') ? ' is-invalid' : '' }}" id="qty" required maxlength="100" style="width:50px;" oninput="count()"/>
+                                        @if($errors->has('qty'))
+                                        <em class="invalid-feedback" role="alert">
+                                            {{ $errors->first('qty') }}
+                                        </em>
+                                    @endif
+                                    </td>
+                                   
+                                    <td align="center" bgcolor="#CCCCCC"><input name="amount" type="text" class="input3" id="amount" style="width:85px;" readonly="readonly" required/></td>
+                                </tr>
+                              
+        
+                            
+                        </table>
+             </form>
 
                 <div id="itemList" data-toggle="popover" style="margin-top:-40px; position: absolute;
                 left: 248px;
-                top: 690px;
+                top: 565px;
                 z-index: 10">
 
                 </div> 
 
-                <table class=" table table-bordered table-striped table-hover datatable">
+                <div id="databaseData">
+                    <table class=" table table-bordered table-striped table-hover datatable">
                             
-                    <tr>
-                        <td><strong>Item Name</strong></td>
-                        <td><strong>Unit Name</strong></td>
-                        <td><strong>Unit Price</strong></td>
-                        <td><strong>Qty</strong></td>
-                        <td><strong>Discount</strong></td>
-                        <td><strong>Amount</strong></td>
-                        <td><strong>Delete</strong></td>
-                        
-                    </tr>
-                   
-                        
-                     @foreach ($data as $datas) 
-                    <tr>
-                        
-                    <td><strong>{{ $datas->item_name }}</strong></td>
-                        <td><strong>{{ $datas->unit_name }}</strong></td>
-                        <td><strong>{{ $datas->rate }}</strong></td>
-                        <td><strong>{{ $datas->qty }}</strong></td>
-                        <td><strong>{{ $datas->discount }}</strong></td>
+                        <tr>
+                            <td><strong>{{ trans('global.sl') }}</strong></td>
+                            <td><strong>Item Name</strong></td>
+                            <td><strong>Unit Name</strong></td>
+                            <td><strong>Unit Price</strong></td>
+                            <td><strong>Qty</strong></td>
+                            <td><strong>Discount</strong></td>
+                            <td><strong>Amount</strong></td>
+                            <td><strong>Delete</strong></td>
+                            
+                        </tr>
+                       
+                        <?php $num = 1;  ?>  
+                         @foreach ($data as $datas) 
+                        <tr id="sum">
+                            
+                        <td><strong>{{ $num }}</strong></td>
                         <td><strong>{{ $datas->item_name }}</strong></td>
-                    <td><strong><form action="{{ route('admin.localpurchase.destroy',  $datas->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="submit" class="btn btn-xs btn-danger" name='delete' value="{{ trans('global.delete') }}">
-                    </form></strong></td>
-                    </tr>
-                      
-                 @endforeach 
-                    
-                </table>
+                            <td><strong>{{ $datas->unit_name }}</strong></td>
+                            <td><strong>{{ $datas->rate }}</strong></td>
+                            <td><strong>{{ $datas->qty }}</strong></td>
+                            <td><strong>{{ $datas->discount }}</strong></td>
+                            <td><strong>{{ $datas->amount }}</strong></td>
+                        <td><strong><form action="{{ route('admin.localpurchase.destroy',  $datas->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="submit" class="btn btn-xs btn-danger" name='delete' value="{{ trans('global.delete') }}">
+                        </form></strong></td>
+                        </tr>
+                        <?php $num++; ?> 
+                     @endforeach 
+                        {{-- <tr>
+                            <td colspan="4"><strong>Total:</strong></td>
+                            <td><strong id="total_qty">00</strong></td>
+                            <td></td>
+                            <td><strong id="total_amount">00</strong></td>
+                            <td></td>
+                        </tr> --}}
+                    </table>
+
+                   
+                     
+            
+                </div>
                 
             </div>
 
@@ -302,6 +332,7 @@
 @section('scripts')
 <script>
 $(document).ready(function(){
+
 
  $('#search').keyup(function(event){ 
 
@@ -358,6 +389,7 @@ else if($(this).val().length > 0) {
                  $('#unit').val(unit);
                  $('#price').val(cost);
                 
+                
                
             },
             error: function(error)
@@ -380,69 +412,29 @@ else if($(this).val().length > 0) {
  });
 
 
-$('#add').click(function() {
-   var or_no = $('#or_no').val();
-   var vp_date = $('#vp_date').val();
-   var vendor_name = $('#vendor_name').val();
-   var receive_type = $('#receive_type').val();
-   var warehouse_id = 51;
-   var item_id =  $('#search').val().split("#>")[1];
-   var unit_name = $('#unit').val();
-   var rate = $('#price').val();
-   var qty = $('#qty').val();
-   var discount = $('#discount').val();
-   var amount = $('#amount').val();
-   var entry_by = 1003;
+ var result = [];
+  $('table tr').each(function(){
+  	$('td', this).each(function(index, val){
+    	if(!result[index]) result[index] = 0;
+      result[index] += parseInt($(val).text());
+    });
+  });
+  console.log(result);
+ 
+ $('table').append('<tr></tr>');
+ $('table tr').last().append('<td colspan="4">'+'<strong>'+"Total:"+'</strong>'+'</td>');
+ $('table tr').last().append('<td>'+'<strong>'+result[4]+'</strong>'+'</td>');
+ $('table tr').last().append('<td>'+'</td>');
+ $('table tr').last().append('<td>'+'<strong>'+result[6]+'</strong>'+'</td>');
+ $('table tr').last().append('<td>'+'</td>');
 
-   $.ajax({
-    url: "{{ route('admin.create') }}",
-    type: "POST",
-    data: {
-                or_no: or_no,
-                vp_date: vp_date,
-                vendor_name: vendor_name,
-                receive_type: receive_type,
-                warehouse_id: warehouse_id,
-                item_id: item_id,
-                unit_name: unit_name,
-                rate: rate,
-                qty: qty,
-                discount: discount,
-                amount: amount,
-                entry_by: entry_by,
-                "_token": "{{ csrf_token() }}",
-                },
-    success: function (data) {
-                
-                $('#search').val(data.item_id);
-                $('#stk').val(data.stock);
-                $('#unit').val(data.unit);
-                $('#price').val(data.price);
-                $('#qty').val(data.qty);
-                $('#discount').val(data.discount);
-                $('#amount').val(data.amount);
-                $('#t_data').fadeIn(); 
-                $('#t_data').html(data.output);
 
-               
-            },
-            error: function(error)
-            {
-                alert('failed');
-                console.log(error);
-                console.log(response);
-                
-            }
+//   $(result).each(function(){
+//   	$('table tr').last().append('<td>'+this+'</td>')
 
-   });
 
-   
 
-   
-   
-   });
-   
-
+//  });
 
 
 

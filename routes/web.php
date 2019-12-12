@@ -36,6 +36,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('/auto/fetch', 'purchase\LocalpurchaseController@fetch')->name('auto.fetch');
     Route::post('/auto/get', 'purchase\LocalpurchaseController@stocks')->name('auto.get');
     Route::post('/insert', 'purchase\LocalpurchaseController@create')->name('create');
+    Route::post('/destroyall', 'purchase\LocalpurchaseController@destroyall')->name('destroyall');
 
 
 

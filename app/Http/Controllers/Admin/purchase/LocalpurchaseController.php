@@ -404,7 +404,17 @@ function stocks(Request $request) {
 
 
 
+function destroyall() {
+//    $detail = (request()->input('or_no'));
+//    $r_detail = Warehouse_other_receive_detail::Where('or_no', $detail)->delete();
+//    $other_r =   Warehouse_other_receive::Where('or_no', $detail)->delete();
+   request()->session()->forget('or_no');
 
+   return redirect()->route('admin.localpurchase.index');
+
+
+
+}
 
 
 

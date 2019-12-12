@@ -263,7 +263,7 @@
                 </div> 
 
                 <div id="databaseData">
-                    <table class=" table table-bordered table-striped table-hover datatable">
+                    <table class=" table table-bordered table-striped table-hover datatable" id="tab_1">
                             
                         <tr>
                             <td><strong>{{ trans('global.sl') }}</strong></td>
@@ -279,7 +279,7 @@
                        
                         <?php $num = 1;  ?>  
                          @foreach ($data as $datas) 
-                        <tr id="sum">
+                        <tr>
                             
                         <td><strong>{{ $num }}</strong></td>
                         <td><strong>{{ $datas->item_name }}</strong></td>
@@ -310,9 +310,30 @@
             
                 </div>
                 
+                
             </div>
 
-            
+            <div class="row">
+                
+                    <div class="col">
+                    <form action="{{ route('admin.destroyall') }}" method="POST">
+                        @csrf
+                                 
+                        
+                        <input  name="or_no" type="hidden" id="" value="{{ isset($orno) ?  "  ".$orno : "  ".$wor->or_no}}"/>
+                        <input type="submit" name="delete_all" class="btn btn-danger" value="Delete All">
+                    </form>
+                        
+                    </div>
+                
+                <div class="col d-flex justify-content-end">
+                        <form action="" method="POST">
+                             <input type="submit" class="btn btn-success" value="Confirm">
+                             
+                            </form>
+                    
+                </div>
+            </div>
 
             
             </div>
@@ -421,12 +442,12 @@ else if($(this).val().length > 0) {
   });
   console.log(result);
  
- $('table').append('<tr></tr>');
- $('table tr').last().append('<td colspan="4">'+'<strong>'+"Total:"+'</strong>'+'</td>');
- $('table tr').last().append('<td>'+'<strong>'+result[4]+'</strong>'+'</td>');
- $('table tr').last().append('<td>'+'</td>');
- $('table tr').last().append('<td>'+'<strong>'+result[6]+'</strong>'+'</td>');
- $('table tr').last().append('<td>'+'</td>');
+ $('table[id^=tab_]').append('<tr></tr>');
+ $('table[id^=tab_] tr').last().append('<td colspan="4">'+'<strong>'+"Total:"+'</strong>'+'</td>');
+ $('table[id^=tab_] tr').last().append('<td>'+'<strong>'+result[4]+'</strong>'+'</td>');
+ $('table[id^=tab_] tr').last().append('<td>'+'</td>');
+ $('table[id^=tab_] tr').last().append('<td>'+'<strong>'+result[6]+'</strong>'+'</td>');
+ $('table[id^=tab_] tr').last().append('<td>'+'</td>');
 
 
 //   $(result).each(function(){

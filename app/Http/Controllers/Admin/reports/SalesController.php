@@ -26,7 +26,7 @@ class SalesController extends Controller
         // $vendor = vendor::select('vendor_id', 'vendor_name')->where('status', 0)->get();
 
 
-        return view('admin.reports.sales', compact('item_sub_group', 'item_group'));
+        return view('admin.reports.sales_rpt', compact('item_sub_group', 'item_group'));
     }
 
     /**
@@ -186,7 +186,7 @@ return view('admin.reports.sales_report', compact('data'));
      */
     public function edit($id)
     {
-        return view('admin.reports.sales');
+        return view('admin.reports.sales_rpt');
     }
 
     /**

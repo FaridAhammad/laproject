@@ -32,14 +32,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('productmanage', 'products\ProductmanageController');
     Route::resource('localpurchase', 'purchase\LocalpurchaseController');
     Route::post('localpurchase/search', 'purchase\LocalpurchaseController@search')->name('search');
+    Route::get('/localpurchase/print/{id}', 'purchase\LocalpurchaseController@print')->name('print');
+    Route::put('/localpurchase/confirm/{id}', 'purchase\LocalpurchaseController@confirmall')->name('confirm');
+
+
     
     Route::post('/auto/fetch', 'purchase\LocalpurchaseController@fetch')->name('auto.fetch');
     Route::post('/auto/get', 'purchase\LocalpurchaseController@stocks')->name('auto.get');
     Route::post('/insert', 'purchase\LocalpurchaseController@create')->name('create');
     Route::post('/destroyall', 'purchase\LocalpurchaseController@destroyall')->name('destroyall');
-    
     Route::resource('sales', 'reports\SalesController');
+
+ 
     Route::get('/double/click', 'reports\SalesController@double_click')->name('doubleclick');
+    Route::resource('purchasereports', 'reports\PurchaseReportsController');
+    Route::resource('stockreports', 'reports\StockReportsController');
 
 
 

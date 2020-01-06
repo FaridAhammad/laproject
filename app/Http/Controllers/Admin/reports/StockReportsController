@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Http\Controllers\Admin\reports;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
+
+class StockReportsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+
+    {
+        $item_group=select_option('item_group', 'group_id', 'group_name', 'status =0');
+
+
+
+
+        $item_sub_group=select_option('item_sub_group', 'sub_group_id', 'sub_group_name', 'status=0');
+        $vendor_name=select_option('vendor', 'vendor_id', 'vendor_name', 'status=0');
+                return view('admin.reports.stockReports',['item_group'=>$item_group, 'item_sub_group'=>$item_sub_group, 'vendor_name'=>$vendor_name]);
+
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+
+        $report=$request->input('report');
+
+
+
+
+
+
+        switch ($report) {
+            case "stock_report":
+
+
+                $wo = DB::table('item_info')
+                    ->join('item_sub_group', 'item_info.sub_group_id','=','item_sub_group.sub_group_id')
+                    ->join('item_group', 'item_sub_group.group_id','=','item_group.group_id')
+                    ->join('warehouse_other_receive_detail', 'item_info.item_id','=','warehouse_other_receive_detail.item_id')
+                    ->join('warehouse_other_issue_detail', 'item_info.item_id','=','warehouse_other_issue_detail.item_id')
+                    ->join('warehouse', 'warehouse_other_issue_detail.warehouse_id','=','warehouse.warehouse_id')
+
+
+                    ->where(function($wo) use ( $request){
+                        $wo->whereRaw("item_info.status = 0 ");
+                        $wo->where('warehouse_other_issue_detail.warehouse_id', '=', 51);
+
+                        if($request->input('item_name')) {
+                            $wo->where('item_info.item_id',explode('#>', $request->input('item_name'))[1]);
+
+
+                        }
+
+                        if($request->input('item_sub_group')) {
+                            $wo->where('item_sub_group.sub_group_id',$request->input('item_sub_group'));
+                        }
+                        if($request->input('item_group')) {
+                            $wo->where('item_group.group_id',$request->input('item_group'));
+                        }
+//
+                    })
+                    ->selectRaw('warehouse_other_receive_detail.item_id,item_info.item_name,item_info.cost_price, item_info.item_description,item_group.group_name, item_sub_group.sub_group_name, sum( warehouse_other_receive_detail.qty) - sum(warehouse_other_issue_detail.qty) as stock')
+                    ->groupBy('item_info.item_id')
+
+                    ->orderBy('item_info.item_name', 'asc')->where('warehouse_other_receive_detail.status','=', '1')
+
+                    ->get();
+
+
+
+
+
+                return view('admin.reports.stockReportsShow', ['wo'=>$wo]);
+
+                break;
+
+
+            default:
+                echo "Empty!";
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}

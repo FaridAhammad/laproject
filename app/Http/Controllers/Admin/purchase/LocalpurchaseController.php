@@ -415,6 +415,16 @@ function destroyall() {
 
 
 }
+     public  function  print($id){
+        $whord=Warehouse_other_receive_detail::where('or_no','=', $id)->Where('status','=','1')->get();
+        $whor=Warehouse_other_receive::where('or_no','=', $id)->first();
+
+
+
+
+
+       return view('admin.purchase.invoiceprint', ['whord'=>$whord, 'whor'=>$whor]);
+    }
 
 
 

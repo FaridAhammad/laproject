@@ -11,7 +11,15 @@ if(!function_exists('db_last_insert_id')) {
 }
 
 // DB::select('select * from users where id = :id', ['id' => 1]);
+if(!function_exists('select_option')) {
+    function select_option($table, $option_id, $option_name, $condition )
+    {
 
+        $sql = \DB::select("select $option_id , $option_name  from $table  where $condition");
+        return $sql;
+
+    }
+}
 
 if(!function_exists('find_all_field')) {
     function find_all_field($table, $field, $codition) {

@@ -1,0 +1,278 @@
+<?php
+
+namespace App\Http\Controllers\Admin\reports;
+
+use Carbon\Carbon;
+
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\model\Product_group;
+use App\model\Vendor;
+use App\model\Customer;
+use App\model\Warehouse_other_receive_detail;
+use App\model\Item_info;
+use App\model\Product_sub_group;
+use Illuminate\Contracts\Database;
+use Illuminate\Support\Facades\DB;
+
+
+
+
+class PurchaseReportsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+        $item_group=select_option('item_group', 'group_id', 'group_name', 'status =0');
+
+
+
+
+//            Product_group::all()->where('status','=', '0');
+        $item_sub_group=select_option('item_sub_group', 'sub_group_id', 'sub_group_name', 'status=0');
+        $vendor_name=select_option('vendor', 'vendor_id', 'vendor_name', 'status=0');
+//            Product_sub_group::all()->where('status','=', '0');
+
+
+
+        return view('admin.reports.purchasereports',['item_group'=>$item_group, 'item_sub_group'=>$item_sub_group, 'vendor_name'=>$vendor_name]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+        $report=$request->input('report');
+
+
+
+        if($request->input('item_name')!='') $item_name=explode('#>', $request->input('item_name'))[1];
+
+
+
+
+
+
+        switch ($report) {
+            case "purchase_report":
+//                $whord=Warehouse_other_receive_detail::selectRaw('or_no, sum(amount) as sum')->groupBy('or_no')->orderBy('or_no')->where('status','=', '1')->take(5)->get();
+
+                $datetime = Carbon::now()->setTimezone('Asia/Dhaka');
+                $date=$datetime->toDateString();
+                $wo = DB::table('warehouse_other_receive_detail')
+                    ->join('item_info', 'warehouse_other_receive_detail.item_id','=','item_info.item_id')
+                    ->join('item_sub_group', 'item_info.sub_group_id','=','item_sub_group.sub_group_id')
+                    ->join('item_group', 'item_sub_group.group_id','=','item_group.group_id')
+                    ->leftJoin('vendor', 'warehouse_other_receive_detail.vendor_id','=','vendor.vendor_id')
+
+
+                    ->where(function($wo) use ( $request, $date){
+                        $wo->whereRaw("warehouse_other_receive_detail.status = 1 ");
+
+                        if($request->input('item_name')) {
+                            $wo->where('warehouse_other_receive_detail.item_id',explode('#>', $request->input('item_name'))[1]);
+                        }
+                        if($request->input('purchase_status')) {
+                            $wo->where('warehouse_other_receive_detail.receive_type',$request->input('purchase_status'));
+                        }
+                        if($request->input('item_sub_group')) {
+                            $wo->where('item_sub_group.sub_group_id',$request->input('item_sub_group'));
+                        }
+                        if($request->input('item_group')) {
+                            $wo->where('item_group.group_id',$request->input('item_group'));
+                        }
+
+                        if($request->input('from') ) {
+                            $wo->whereBetween('warehouse_other_receive_detail.or_date', [$request->input('from'),$date]);;
+                        }
+                        if($request->input('from')&& $request->input('to') ) {
+                            $wo->whereBetween('warehouse_other_receive_detail.or_date', [$request->input('from'),$request->input('to')]);
+                        }
+
+                        if($request->input('vendor_name')) {
+                            $wo->where('warehouse_other_receive_detail.vendor_id', $request->input('vendor_name'));;
+                        }
+
+
+                    })
+
+                    ->selectRaw('or_no, sum(amount) as sum, receive_type')->groupBy('or_no')
+                    ->orderBy('or_no')
+                    ->get();
+
+                return view('admin.reports.purchaseReportsShow', ['wo'=>$wo]);
+
+
+
+
+
+
+
+                break;
+            case "advance_purchase_report":
+
+                // item_info -> product_sub_group , sub_group_id, item_info (2), product_sub_group->many data, product_group->many many data
+//                $wo=Warehouse_other_receive_detail::with(['item_info', 'vendor', 'customer', 'item_info.product_sub_group'=> function($query, $request){
+//                    $query->where('sub_group_id',$request->input('item_sub_group'));
+//                }, 'item_info.product_sub_group.product_group'])
+//                    ->select('sub_group_id')
+//                    ->orderBy('or_no', 'asc')
+//                ->where(function($wo) use ( $request){
+//                $wo->whereRaw("status = 1 ");
+//
+//                if($request->input('item_name')) {
+//                    $wo->where('item_id',explode('#>', $request->input('item_name'))[1]);
+//                }
+//                    if($request->input('purchase_status')) {
+//                        $wo->where('receive_type',$request->input('purchase_status'));
+//                    }
+//                    if($request->input('item_sub_group')) {
+//
+//                    }
+//
+//            })->get();
+
+
+
+                $datetime = Carbon::now()->setTimezone('Asia/Dhaka');
+                $date=$datetime->toDateString();
+                $wo = DB::table('warehouse_other_receive_detail')
+                    ->join('item_info', 'warehouse_other_receive_detail.item_id','=','item_info.item_id')
+                    ->join('item_sub_group', 'item_info.sub_group_id','=','item_sub_group.sub_group_id')
+                    ->join('item_group', 'item_sub_group.group_id','=','item_group.group_id')
+                    ->leftJoin('vendor', 'warehouse_other_receive_detail.vendor_id','=','vendor.vendor_id')
+
+
+                    ->where(function($wo) use ( $request, $date){
+                        $wo->whereRaw("warehouse_other_receive_detail.status = 1 ");
+
+                        if($request->input('item_name')) {
+                            $wo->where('warehouse_other_receive_detail.item_id',explode('#>', $request->input('item_name'))[1]);
+                        }
+                        if($request->input('purchase_status')) {
+                            $wo->where('warehouse_other_receive_detail.receive_type',$request->input('purchase_status'));
+                        }
+                        if($request->input('item_sub_group')) {
+                            $wo->where('item_sub_group.sub_group_id',$request->input('item_sub_group'));
+                        }
+                        if($request->input('item_group')) {
+                            $wo->where('item_group.group_id',$request->input('item_group'));
+                        }
+
+                        if($request->input('from') ) {
+                            $wo->whereBetween('warehouse_other_receive_detail.or_date', [$request->input('from'),$date]);;
+                        }
+                        if($request->input('from')&& $request->input('to') ) {
+                            $wo->whereBetween('warehouse_other_receive_detail.or_date', [$request->input('from'),$request->input('to')]);
+                        }
+
+                        if($request->input('vendor_name')) {
+                            $wo->where('warehouse_other_receive_detail.vendor_id', $request->input('vendor_name'));;
+                        }
+
+
+                    })
+                    ->orderBy('or_no')
+                    ->get();
+
+
+
+
+
+
+
+
+
+                return view('admin.reports.advancePurchaseReportsShow', ['wo'=>$wo]);
+
+                break;
+
+            default:
+                echo "Empty!";
+        }
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+    public function dblclick(){
+
+        $data = Item_info::all();
+
+
+        $output = '<ul class="dropdown-menu overflow-auto ml-3" style="display:block;  max-height:200px; width: 335px;">';
+        foreach($data as $row)
+        {
+            $output .= '
+       <li id="list" class="font-weight-bold text-decoration-none " style="cursor:pointer;">'.$row->item_name."&nbsp;"."#>".$row->item_id.'</li>
+       ';
+        }
+        $output .= '</ul>';
+        echo $output;
+
+    }
+}

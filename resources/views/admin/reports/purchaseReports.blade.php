@@ -1,5 +1,3 @@
-
-
 @section('styles')
     <style type="text/css">
         .itemList ul li {
@@ -25,27 +23,29 @@
 @endsection
 @extends('layouts.admin')
 @section('content')
-    <div   class="container"   >
+    <form action="{{route('admin.purchasereports.store')}}" method="post">
+        @csrf
+
+        <div   class="container"   >
             <div class="w-25 float-left " style="padding-top: 15%; padding-left: 7%; " >
                 <h4>Select Report</h4>
 
                 <div class="radio">
-                    <label><input type="radio" name="optradio" >Purchase Report</label>
+                    <label><input type="radio" name="report" value="purchase_report" >Purchase Report</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio"  name="optradio" checked>Advance Purchase Report</label>
+                    <label><input type="radio"  name="report" value="advance_purchase_report" checked>Advance Purchase Report</label>
                 </div>
 
             </div>
 
 
         <div class=" float-right " style="padding: 3% 3%  5%; width: 65%">
-            <form>
 
                 <div class="form-group row">
                     <label for="item_name" class="col-sm-3 col-form-label">Itam Name</label>
                     <div class="col-sm-8"  style="position: relative">
-                        <input type="text" id="item_name" autocomplete="off" class="form-control"  placeholder="">
+                        <input type="text" id="item_name" name="item_name" autocomplete="off" class="form-control"  placeholder="">
                         <div id="itemList" class="itemList" data-toggle="popover" style=" position: absolute; top: 100%; left: 0">
 
                         </div>
@@ -55,11 +55,11 @@
                 <div class="form-group row">
                     <label for="item_sub_group" class="col-sm-3 col-form-label">Item Sub Group</label>
                         <div  class="col-sm-8">
-                        <select  class="form-control">
-                            <option selected disabled>---Select 0ne----</option>
+                        <select  class="form-control" name="item_sub_group" id="item_sub_group" >
+                            <option selected  value="">---Select 0ne----</option>
 
                         @foreach($item_sub_group as $igp)
-                            <option value="" >{{$igp->sub_group_name}}</option>
+                            <option value="{{$igp->sub_group_id}}" >{{$igp->sub_group_name}}</option>
                             @endforeach
 
                         </select>
@@ -68,38 +68,38 @@
 
                 </div>
                 <div class="form-group row">
-                    <label for="item_name" class="col-sm-3 col-form-label">Item Group</label>
+                    <label for="item_group" class="col-sm-3 col-form-label">Item Group</label>
                     <div  class="col-sm-8">
-                        <select  class="form-control">
-                            <option selected disabled>---Select 0ne----</option>
+                        <select  class="form-control" name="item_group" id="item_group">
+                            <option selected value="">---Select 0ne----</option>
 
                         @foreach($item_group as $ig)
-                            <option >{{$ig->group_name}}</option>
+                            <option value="{{$ig->group_id}}">{{$ig->group_name}}</option>
                                 @endforeach
 
                         </select>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="item_name" class="col-sm-3 col-form-label">From</label>
+                    <label for="from" class="col-sm-3 col-form-label">From</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control date" id="item_name" placeholder="">
+                        <input type="text"  name="from" class="form-control date" id="from" placeholder="">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="item_name" class="col-sm-3 col-form-label">To</label>
+                    <label for="to" class="col-sm-3 col-form-label">To</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control date" id="item_name" placeholder="">
+                        <input type="text" name="to" class="form-control date" id="to" placeholder="">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="item_name" class="col-sm-3 col-form-label">Vendor Name</label>
+                    <label for="vendor_name" class="col-sm-3 col-form-label">Vendor Name</label>
                     <div  class="col-sm-8">
-                        <select  class="form-control">
-                            <option selected disabled>---Select 0ne----</option>
+                        <select  class="form-control" name="vendor_name" id="vendor_name">
+                            <option selected value="">---Select 0ne----</option>
 
                         @foreach($vendor_name as $vn)
-                                <option value="" >{{$vn->vendor_name}}</option>
+                                <option value="{{$vn->vendor_id}}" >{{$vn->vendor_name}}</option>
                             @endforeach
 
                         </select>
@@ -107,32 +107,40 @@
 
                 </div>
                 <div class="form-group row">
-                    <label for="item_name" class="col-sm-3 col-form-label">Purchase Status</label>
+                    <label for="purchase_status" class="col-sm-3 col-form-label">Purchase Status</label>
                     <div  class="col-sm-8">
-                    <select  class="form-control">
-                        <option selected disabled>---Select 0ne----</option>
+                    <select  class="form-control" name="purchase_status" id="purchase_status">
+                        <option selected value="">---Select 0ne----</option>
 
-                            <option value="" >Opening Balance</option>
-                            <option value="" >Local Purchase</option>
-                            <option value="" >Vendor Purchase</option>
-                            <option value="" >Other Receive</option>
+                            <option value="Opening Balance" >Opening Balance</option>
+                            <option value="Local Purchase" >Local Purchase</option>
+                            <option value="Vendor Purchase" >Vendor Purchase</option>
+                            <option value="Other Receive" >Other Receive</option>
 
 
                     </select>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="item_name" class="col-sm-3 col-form-label">Inventory Name</label>
+                    <label for="inventory_name" class="col-sm-3 col-form-label">Inventory Name</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="item_name" placeholder="">
+                        <input type="text" name="inventory_name" class="form-control" id="inventory_name" placeholder="">
                     </div>
                 </div>
-            </form>
-            <div><button type="button" name="report" class=" col-sm-3 btn btn-info">Report</button> </div>
+                <div class="form-group row">
+
+                       <input type="submit" formtarget="_blank" class="col-sm-3 btn btn-primary" value="Report">
+
+
+
+                </div>
+
+
 
         </div>
 
     </div>
+    </form>
 @endsection
 @section('scripts')
     <script type="text/javascript">
@@ -198,7 +206,9 @@
 
         $(document).click(function() {
             $('#itemList').fadeOut();
+
         });
+       
 
     </script>
     @endsection

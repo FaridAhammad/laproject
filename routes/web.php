@@ -50,7 +50,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 
 
+    Route::resource('localsales', 'sales\LocalsalesController');
 
+    Route::get('/customer', 'sales\LocalsalesController@customer')->name('customer');
+
+    Route::post('/create', 'sales\LocalsalesController@create')->name('insert');
+    
+    Route::post('/deleteall', 'sales\LocalsalesController@deleteall')->name('deleteall');
 
 
 

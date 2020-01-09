@@ -12,9 +12,12 @@ class Product_group extends Model
 {
 
     protected $table = 'item_group';
+    protected $primaryKey = 'group_id';
+    public $timestamps=false;
     protected $fillable = [
        
         'group_name',
+        'status'
         
     ];
 

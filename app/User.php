@@ -12,7 +12,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, Notifiable;
+   // use SoftDeletes, Notifiable;
+    
+    use Notifiable;
+    
 
     protected $hidden = [
         'password',

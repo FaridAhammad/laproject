@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Admin\administrator;
 
-use Dotenv\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\model\User_activity_management;
 use App\model\User_type;
+use Illuminate\Support\Facades\Crypt;
+use App\User;
+use Auth;
+use DB;
 
 class UsermanageController extends Controller
 {
@@ -19,12 +26,17 @@ class UsermanageController extends Controller
     {
         $update = false;
 
+        
+        
+        $uams = DB::table('users')
+        ->join('user_type', 'users.level', '=', 'user_type.user_level')
+        ->select('users.*', 'user_type.*')->get();
+        
+        
 
+        $user_types = User_type::all()->pluck('user_type_name_show', 'user_level');
 
-        $uams=User_activity_management::all();
-        $user_types= User_type::all()->pluck('user_type_name_show', 'user_level');
-
-        return view('admin.administrator.userManage', ['id'=>'','fname'=>'','user_name'=>'','email'=>'','user_ty'=>'','password'=>'', 'update'=>$update], compact('uams','user_types'));
+        return view('admin.administrator.userManage', ['id'=>'','fname'=>'','user_name'=>'','email'=>'','user_ty'=>'','password'=>'', 'designation'=>'', 'mobile'=>'', 'update'=>$update], compact('uams','user_types'));
 
     }
 
@@ -46,17 +58,46 @@ class UsermanageController extends Controller
      */
     public function store(Request $request)
     {
-        abort_unless(\Gate::allows('user_create'), 403);
+        
+        $request->validate([
+        'full_name' => 'required',
+        'username' => ['required', 'string', 'max:255', 
+        Rule::unique('users')->where (function ($query) use ($request) {
+            return $query->where('status', 0);
+        })],
+        'email' => '',
+        'password' => ['required', 'string', 'min:4'],
+        'user_types' => 'required',
+        'designation' => '',
+        'mobile' => '',
+        'pass_word'=> ''
+        ]);
+        
+        if ($request->input('user_types') != '---Select One----') {
 
-        $validator=Validator::make($request->all(), [
+            $time = Carbon::now()->setTimezone('Asia/Dhaka');
+            $data = $request->input('password');
+            
+            
+            
+            User::create([
+                'fname' => $request->input('full_name'),
+                'username'=> $request->input('username'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($data),
+                'level' => $request->input('user_types'),
+                'designation'=> $request->input('designation'),
+                'mobile'=> $request->input('mobile'),
+                'warehouse_id' => Auth::user()->warehouse_id,
+                'status' => 0,
+                'entry_by' => Auth::user()->user_id,
+                'entry_at' => $time,
+                ]);
+         }
+        
 
-            ]);
 
-        if($validator->fails()){
-
-            redirect()->back()->withErrors($validator)->exceptInput();
-        }
-        $user_activity_management = User_activity_management::create($request->all());
+       
 
         return redirect()->route('admin.usermanage.index');
     }
@@ -80,39 +121,35 @@ class UsermanageController extends Controller
      */
     public function edit($user_id)
     {
-        abort_unless(\Gate::allows('user_edit'), 403);
-        $uams=User_activity_management::all();
+        
+        $uams=User::all();
 
-//        $uam=User_activity_management::select('user_id', 'fname', 'username', 'email', 'level')->find($user_id);
+//        $uam=User::select('user_id', 'fname', 'username', 'email', 'level')->find($user_id);
 
 
 
-        $user_types= User_type::all()->pluck('user_type_name_show', 'user_level');
+        $user_types = User_type::all()->pluck('user_type_name_show', 'user_level');
 
-        $uam = User_activity_management::select('user_id', 'fname', 'username', 'email', 'level', 'password')->where('user_id', $user_id)->first();
+        $uam = User::select('user_id', 'fname', 'username', 'email', 'level', 'password', 'designation', 'mobile')->where('user_id', $user_id)->first();
 
+
+        
 
                 $id=$uam->user_id;
                 $fname=$uam->fname;
                 $user_name=$uam->username;
                 $email=$uam->email;
                 $password= $uam->password;
+                
                 $user_ty=$uam->level;
+                $designation=$uam->designation;
+                $mobile=$uam->mobile;
+
 
         $update = true;
 
 
-
-
-
-
-
-
-
-
-
-
-        return view('admin.administrator.userManage', ['id'=>$id,'fname'=>$fname,'user_name'=>$user_name, 'email'=>$email,'user_ty'=>$user_ty,'password'=>$password, 'update'=>$update, 'uam'], compact('uams', 'user_types' ));
+        return view('admin.administrator.userManage', ['id'=>$id,'fname'=>$fname,'user_name'=>$user_name, 'email'=>$email,'user_ty'=>$user_ty,'password'=>$password, 'designation'=>$designation, 'mobile'=>$mobile, 'update'=>$update, 'uam'], compact('uams', 'user_types' ));
 
 
     }
@@ -128,19 +165,35 @@ class UsermanageController extends Controller
     {
 
 
+        $request->validate([
+            'full_name' => 'required',
+            'username' => ['required', 'string', 'max:255', 
+            Rule::unique('users')->where (function ($query) use ($request) {
+                return $query->where('status', 0);
+            })->ignore($id, 'user_id')],
+            'email' => '',
+            'password' => ['required', 'string', 'min:4'],
+            'user_types' => 'required',
+            'designation' => '',
+            'mobile' => ''
+            ]);
 
-        $uama = User_activity_management::where('user_id', $id);
 
-
-
+        $uama = User::where('user_id', $id);
+        $time = Carbon::now()->setTimezone('Asia/Dhaka');
+        $data = $request->input('password');
         $uama->update([
-
-                'fname'=>$request->input('fname'),
-                'username'=>$request->input('username'),
-                 'email'=>$request->input('email'),
-                'password'=>$request->input('password'),
-                'level'=>$request->input('level'),
-
+            'fname' => $request->input('full_name'),
+            'username'=> $request->input('username'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($data),
+            'level' => $request->input('user_types'),
+            'designation'=> $request->input('designation'),
+            'mobile'=> $request->input('mobile'),
+            'warehouse_id' => Auth::user()->warehouse_id,
+            'status' => 0,
+            'edit_by' => Auth::user()->user_id,
+            'edit_at' => $time,
         ]);
         $update=false;
         return redirect()->route('admin.usermanage.index');
@@ -155,13 +208,19 @@ class UsermanageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($user_id)
     {
-        $user = User_activity_management::where('user_id', $id);
+        
+        $id = User::where('user_id', $user_id)->first(); 
 
-        $user->delete();
+if($id) {
+
+    $id->delete();
+}
+        
         return redirect()->route('admin.usermanage.index');
 
 
     }
+
 }

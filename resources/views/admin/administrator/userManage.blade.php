@@ -48,29 +48,25 @@
                             </td>
 
                             <td>
-                                <span class="badge badge-info">{{ $uam->user_types->user_type_name_show }}</span>
-                                {{--@foreach($uam->user_types as $key => $item)--}}
-                                    {{--<span class="badge badge-info">{{ $item->user_type_name_show }}</span>--}}
-                                {{--@endforeach--}}
+                                <span class="badge badge-info">{{ $uam->user_type_name }}</span>
+                                
                             </td>
                             <td>
-                                @can('user_show')
-                                    <a class="btn btn-xs btn-primary">
-                                        {{ trans('global.view') }}
-                                    </a>
-                                @endcan
-                                @can('user_edit')
+                                
+                                    
+                            
+                                
                                     <a class="btn btn-xs btn-info" href="{{route('admin.usermanage.edit', $uam->user_id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
-                                @endcan
-                                @can('user_delete')
+                                
+                                
                                     <form  method="POST" action="{{route('admin.usermanage.destroy', $uam->user_id)}}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
-                                @endcan
+                            
                             </td>
 
                         </tr>
@@ -142,69 +138,60 @@
         <div class="card-body">
             <form action="@if($update==false){{ route('admin.usermanage.store') }} @elseif($update==true){{ route('admin.usermanage.update', $id) }} @endif" method="POST" enctype="multipart/form-data">
                 @csrf
-                @if($update==true) @method('PUT')
+                @if($update==true) 
+                @method('PUT')
             @endif
-                <div class="form-group {{ $errors->has('fname') ? 'has-error' : '' }}">
-                    <label for="fname">{{ trans('global.user.fields.fname') }}*</label>
-                    <input type="text" id="fname" name="fname" class="form-control" value="{{$fname}}"
-                            {{--value="{{ old('username', isset($user) ? $user->username : '') }}"--}}
-                    >
-                    @if($errors->has('fname'))
+                <div class="form-group">
+                    <label for="full_name">{{ trans('global.user.fields.fname') }}*</label>
+                    <input type="text" id="full_name" name="full_name" class="form-control {{ $errors->has('full_name') ? ' is-invalid' : '' }}" value="{{$fname}}">
+                    @if($errors->has('full_name'))
                         <em class="invalid-feedback">
-                            {{ $errors->first('fname') }}
+                            {{ $errors->first('full_name') }}
                         </em>
                     @endif
-                    <p class="helper-block">
-                        {{ trans('global.user.fields.name_helper') }}
-                    </p>
+                   
                 </div>
 
 
 
 
-                <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                <div class="form-group">
                     <label for="username">{{ trans('global.user.fields.name') }}*</label>
-                    <input type="text" id="username" name="username" class="form-control"  value="{{$user_name}}"
-                            {{--value="{{ old('username', isset($user) ? $user->username : '') }}"--}}
-                    >
+                    <input type="text" id="username" name="username" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}"  value="{{$user_name}}">
                     @if($errors->has('username'))
                         <em class="invalid-feedback">
                             {{ $errors->first('username') }}
                         </em>
                     @endif
-                    <p class="helper-block">
-                        {{ trans('global.user.fields.name_helper') }}
-                    </p>
+                    
                 </div>
-                <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+
+                <div class="form-group">
                     <label for="email">{{ trans('global.user.fields.email') }}*</label>
-                    <input type="email" id="email" name="email" class="form-control" value="{{$email}}"
-                            {{--value="{{ old('email', isset($user) ? $user->email : '') }}"--}}
-                    >
+                    <input type="email" id="email" name="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{$email}}">
                     @if($errors->has('email'))
                         <em class="invalid-feedback">
                             {{ $errors->first('email') }}
                         </em>
                     @endif
-                    <p class="helper-block">
-                        {{ trans('global.user.fields.email_helper') }}
-                    </p>
+                   
                 </div>
-                <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+
+                <div class="form-group">
                     <label for="password">{{ trans('global.user.fields.password') }}</label>
-                    <input type="password" id="password" name="password" class="form-control" value="{{$password}}">
+                    <input type="text" id="password" name="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" value="{{$password}}">
                     @if($errors->has('password'))
                         <em class="invalid-feedback">
                             {{ $errors->first('password') }}
                         </em>
                     @endif
-                    <p class="helper-block">
-                        {{ trans('global.user.fields.password_helper') }}
-                    </p>
+
+                    
                 </div>
-                <div class="form-group {{ $errors->has('user_types') ? 'has-error' : '' }}">
+               
+                <div class="form-group">
                     <label for="user_types" >{{ trans('global.user.fields.user_type') }}*  </label>
-                    <select name="level" id="user_types"  class="form-control" >
+                    <select name="user_types" id="user_types"  class="form-control {{ $errors->has('user_types') ? 'is-invalid' : '' }}" >
                             <option> ---Select One----</option>
                         @foreach($user_types as $u_id => $user_type)
                             <option value="{{ $u_id }}" @if($update==true) {@if($user_ty==$u_id) selected @endif } @endif>
@@ -217,19 +204,40 @@
                             {{ $errors->first('user_types') }}
                         </em>
                     @endif
-                    <p class="helper-block">
-                        {{ trans('global.user.fields.roles_helper') }}
-                    </p>
+                   
+                </div>
+
+                <div class="form-group">
+                <label for="designation">Designation</label>
+                <input type="text" id="designation" name="designation" class="form-control {{ $errors->has('designation') ? 'is-invalid' : '' }}" value="{{ $designation }}">
+                @if($errors->has('designation'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('designation') }}
+                        </em>
+                    @endif
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">Mobile No</label>
+                <input type="text" id="mobile" name="mobile" class="form-control {{ $errors->has('mobile') ? 'is-invalid' : '' }}" autocomplete="off" value="{{ $mobile }}">
+                    @if($errors->has('mobile'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('mobile') }}
+                        </em>
+                    @endif
+                </div>
+                <div class="from-group">
+                    <input type="hidden" name="warehouse_id" value="51">
                 </div>
 
                 <div>
                     @if($update == true)
-                    {{--<input class="btn btn-danger" type="submit" value="{{ trans('global.update') }}">--}}
-                    <button class="btn btn-primary" type="submit" name="update">{{ trans('global.update') }} </button>
+                   
+                    <button class="btn btn-primary" id="insert"  type="submit" name="update">{{ trans('global.update') }} </button>
 
 
                     @elseif($update==false)
-                        {{--<input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">--}}
+                        
                         <button class="btn btn-success" type="submit" name="save"  >{{ trans('global.save') }} </button>
 
 

@@ -30,6 +30,25 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'pass_word',
+        'fname',
+        'address',
+        'mobile',
+        'designation',
+        'level',
+        'group_for',
+        'warehouse_id',
+        'entry_date',
+        'expire_date',
+        'entry_by',
+        'entry_at',
+        'edit_by',
+        'edit_at',
+        'delete_by',
+        'delete_at',
+        'actual_datetime',
+        'status',
+        
         'created_at',
         'updated_at',
         'deleted_at',
@@ -59,8 +78,8 @@ class User extends Authenticatable
         $this->notify(new ResetPassword($token));
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+//     public function roles()
+//     {
+//         return $this->belongsToMany(Role::class);
+//     }
 }

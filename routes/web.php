@@ -41,6 +41,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('/auto/get', 'purchase\LocalpurchaseController@stocks')->name('auto.get');
     Route::post('/insert', 'purchase\LocalpurchaseController@create')->name('create');
     Route::post('/destroyall', 'purchase\LocalpurchaseController@destroyall')->name('destroyall');
+    Route::get('/vendor', 'purchase\LocalpurchaseController@vendor')->name('vendor');
     Route::resource('sales', 'reports\SalesController');
 
  
